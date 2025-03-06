@@ -1,0 +1,22 @@
+{
+  "name": "bucketlist",
+  "version": "1.0.0",
+  "description": "Logger for bucketlist and other adventures",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/palosferi/bucketlist.git"
+  },
+  "author": "Pálos Ferenc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/palosferi/bucketlist/issues"
+  },
+  "homepage": "https://github.com/palosferi/bucketlist#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

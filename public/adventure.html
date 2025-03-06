@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Adventure Details</h1>
+        <nav>
+            <a href="adventures.html">Adventures</a>
+            <a href="locations.html">Locations</a>
+        </nav>
+    </header>
+    <main>
+        <form onsubmit="event.preventDefault(); window.location.href='adventures.html';">
+            <label>Name: <input type="text"></label>
+            <label>Type: <input type="text"></label>
+            <label>Date: <input type="date"></label>
+            <label>Location: <input type="text"></label>
+            <label>Description: <textarea></textarea></label>
+            
+            <button type="submit">Save</button>
+            <button type="button" onclick="window.location.href='adventures.html';">Delete</button>
+        </form>
+    </main>
+</body>
+</html>

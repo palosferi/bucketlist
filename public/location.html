@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Location Details</h1>
+        <nav>
+            <a href="adventures.html">Adventures</a>
+            <a href="locations.html">Locations</a>
+        </nav>
+    </header>
+    <main>
+        <form onsubmit="event.preventDefault(); window.location.href='locations.html';">
+            <label>Name: <input type="text"></label>
+            <label>Country: <input type="text"></label>
+            <label>Latitude: <input type="text"></label>
+            <label>Longitude: <input type="text"></label>
+            <label>Google Maps link: <textarea></textarea></label>
+            <button type="submit">Save</button>
+            <button type="button" onclick="window.location.href='locations.html';">Delete</button>
+        </form>
+    </main>
+</body>
+</html>
