@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location Details</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Location Details</h1>
-        <nav>
-            <a href="adventures.html">Adventures</a>
-            <a href="locations.html">Locations</a>
-        </nav>
-    </header>
+<%- include('header') %>
     <main>
-        <form onsubmit="event.preventDefault(); window.location.href='locations.html';">
+        <form onsubmit="event.preventDefault(); window.location.href='/locations';">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name">
@@ -33,14 +18,13 @@
                 <input type="text" id="longitude">
             </div>
             <div class="form-group">
-                <label for="google-maps">Google Maps link:</label>
+                <label for="google-maps">Link:</label>
                 <textarea id="google-maps"></textarea>
             </div>
             <div class="button-container">
                 <button type="submit" class="button">Save</button>
-                <button type="button" class="button delete" onclick="window.location.href='locations.html';">Delete</button>
+                <button type="button" class="button delete" onclick="window.location.href='/locations';">Delete</button>
             </div>
         </form>
     </main>
-</body>
-</html>
+<%- include('footer') %>

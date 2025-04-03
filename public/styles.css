@@ -1,18 +1,24 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: "Arial", sans-serif;
+    height: 100%;
     margin: 0;
     padding: 0;
     background-color: #121212;
-    color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
+    color:#ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #1e1e1e;
     padding: 20px 50px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 header h1 {
@@ -33,12 +39,17 @@ nav a:hover {
 }
 
 main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
     max-width: 1000px;
-    margin: 40px auto;
-    background: #1e1e1e;
+    margin: 0 auto;
+    background: #121212;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 /* General form styling */
@@ -49,7 +60,8 @@ form {
     background: #1e1e1e;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 800px;
 }
 
 /* Form groups */
@@ -125,13 +137,8 @@ textarea {
     background: #b71c1c;
 }
 
-
-
-.button:hover {
-    background: #45a049;
-}
-
 table {
+    color: #fff;
     width: 100%;
     border-collapse: collapse;
     background-color: #222;
@@ -168,4 +175,11 @@ td a {
 
 td a:hover {
     text-decoration: underline;
+}
+
+footer {
+    background-color: #121212;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
 }

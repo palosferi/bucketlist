@@ -11,14 +11,14 @@ const renderMW = require('../middlewares/render');
 
 function subscribeToRoutes(app) {
     const objRepo = {};
-    app.get('/', loadAdventuresMW(objRepo), renderMW(objRepo))
-    app.get('/locations', loadLocationsMW(objRepo), renderMW(objRepo))
-    app.get('/adventure/edit/:id', loadAdventureMW(objRepo), renderMW(objRepo))
-    app.get('/location/edit/:id', loadLocationMW(objRepo), renderMW(objRepo))
-    app.get('/adventure/new', saveAdventureMW(objRepo), renderMW(objRepo))
-    app.get('/location/new', saveLocationMW(objRepo), renderMW(objRepo))
-    app.get('/adventure/delete/:id', deleteAdventureMW(objRepo), renderMW(objRepo))
-    app.get('/location/delete/:id', deleteLocationMW(objRepo), renderMW(objRepo))
+    app.get('/', loadAdventuresMW(objRepo), renderMW(objRepo, 'adventures'));
+    app.get('/locations', loadLocationsMW(objRepo), renderMW(objRepo, 'locations'));
+    app.get('/adventure/edit/:id', loadAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.get('/location/edit/:id', loadLocationMW(objRepo), renderMW(objRepo, 'location'));
+    app.get('/adventure/new', saveAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.get('/location/new', saveLocationMW(objRepo), renderMW(objRepo, 'location'));
+    app.get('/adventure/delete/:id', deleteAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.get('/location/delete/:id', deleteLocationMW(objRepo), renderMW(objRepo, 'location'));
 }
 
 module.exports = subscribeToRoutes;

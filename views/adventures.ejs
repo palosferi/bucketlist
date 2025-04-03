@@ -1,0 +1,27 @@
+<%- include('header') %>
+    <main>
+        <div class="button-container">
+            <a href="/adventure/new" class="button">New Adventure</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="/adventure/edit/1">hiking with Reka</a></td>
+                    <td>Hiking</td>
+                    <td>01/01/25</td>
+                    <td><a href="/location/edit/1">New York</a></td>
+                    <td>nagyon jo volt, leteszteltuk az osszes camping felszerelest</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+<%- include('footer') %>

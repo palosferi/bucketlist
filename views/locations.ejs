@@ -1,0 +1,27 @@
+<%- include('header') %>
+    <main>
+        <div class="button-container">
+            <a href="/location/new" class="button">New Location</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="/location/edit/1">New York</a></td>
+                    <td>USA</td>
+                    <td>40.7128</td>
+                    <td>-74.0060</td>
+                    <td><a href="https://maps.app.goo.gl/VdKva9fUMuEWyXCdA">Google Maps</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+<%- include('footer') %>
