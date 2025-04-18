@@ -14,13 +14,15 @@
                 </tr>
             </thead>
             <tbody>
+                <%= for (let i = 0; i < adventures.length; i++) { adventure= adventures[i]; } %>
                 <tr>
-                    <td><a href="/location/edit/1">New York</a></td>
-                    <td>USA</td>
-                    <td>40.7128</td>
-                    <td>-74.0060</td>
-                    <td><a href="https://maps.app.goo.gl/VdKva9fUMuEWyXCdA">Google Maps</a></td>
+                    <td><a href="/location/edit/<%= adventure._id %>"><%= location.name %></a></td>
+                    <td><%= location.country %></td>
+                    <td><%= location.latitude %></td>
+                    <td><%= location.longitude %></td>
+                    <td><a href="<%= location.google-maps %>">Google Maps</a></td>
                 </tr>
+                <%= } %>
             </tbody>
         </table>
     </main>

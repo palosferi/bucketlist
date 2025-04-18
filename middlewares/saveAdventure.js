@@ -4,7 +4,15 @@
  * @returns {function(*, *, *): * }
  */
 module.exports = (objRepo) => {
+    const AdventureModel = objRepo.AdventureModel;
     return (req, res, next)=>{
-        return next();
+        const newAdventure = objRepo.AdventureModel();
+        newAdventure.name = req.body.name;
+        newAdventure.type = req.body.type;
+        newAdventure.date = req.body.date;
+        newAdventure.description = req.body.description;
+        return newAdventure.save().then(() => {
+            return res.redirect("/");
+        }).catch(next);
     }
 }

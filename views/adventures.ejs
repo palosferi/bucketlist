@@ -14,13 +14,15 @@
                 </tr>
             </thead>
             <tbody>
+                <%= for (let i = 0; i < adventures.length; i++) { adventure= adventures[i]; } %>
                 <tr>
-                    <td><a href="/adventure/edit/1">hiking with Reka</a></td>
-                    <td>Hiking</td>
-                    <td>01/01/25</td>
-                    <td><a href="/location/edit/1">New York</a></td>
-                    <td>nagyon jo volt, leteszteltuk az osszes camping felszerelest</td>
+                    <td><a href="/adventure/edit/<%= adventure._id %>"><%= adventure.name %></a></td>
+                    <td><%= adventure.type %></td>
+                    <td><%= adventure.date %></td>
+                    <td><a href="/location/edit/<%= adventure._id %>"><%= adventure.location %></a></td>
+                    <td><%= adventure.description %></td>
                 </tr>
+                <%= } %>
             </tbody>
         </table>
     </main>

@@ -5,6 +5,9 @@
  */
 module.exports = (objRepo) => {
     return (req, res, next)=>{
-        return next();
+        return objRepo.adventureModel.find({}, (torpek)=>{
+            res.locals.adventures = adventures;
+            return next();
+        })
     }
 }
