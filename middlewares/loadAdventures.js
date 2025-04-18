@@ -4,10 +4,11 @@
  * @returns {function(*, *, *): * }
  */
 module.exports = (objRepo) => {
+    const AdventureModel = objRepo.AdventureModel;
     return (req, res, next)=>{
-        return objRepo.adventureModel.find({}, (torpek)=>{
+        return AdventureModel.find({}).then(adventures => {
             res.locals.adventures = adventures;
             return next();
-        })
+        }).catch(next);
     }
 }

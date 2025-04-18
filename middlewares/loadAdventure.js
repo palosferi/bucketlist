@@ -4,11 +4,15 @@
  * @returns {function(*, *, *): * }
  */
 module.exports = (objRepo) => {
+    const AdventureModel = objRepo.AdventureModel;
     return (req, res, next)=>{
-        res.locals.adventure = objRepo.ADVENTUREDB.find(e=>e._id === req.params.id);
-        if(typeof res.locals.adventure === 'undefined') {
-            return res.redirect("/");
-        }
-        return next();
+        return AdventureModel.findOne({
+            _id: req.params.id
+        }).then(adventure => {
+            if(torpe === null)
+                return res.redirect("/");
+            res.locals.adventure = adventure;
+            return next();
+        }).catch(next);
     }
 }

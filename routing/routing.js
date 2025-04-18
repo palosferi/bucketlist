@@ -15,12 +15,12 @@ function subscribeToRoutes(app) {
     const objRepo = {AdventureModel : AdventureModel};
     app.get('/', loadAdventuresMW(objRepo), renderMW(objRepo, 'adventures'));
     app.get('/locations', loadLocationsMW(objRepo), renderMW(objRepo, 'locations'));
-    app.get('/adventure/edit/:id', loadAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
-    app.get('/location/edit/:id', loadLocationMW(objRepo), renderMW(objRepo, 'location'));
-    app.get('/adventure/new', saveAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
-    app.get('/location/new', saveLocationMW(objRepo), renderMW(objRepo, 'location'));
-    app.get('/adventure/delete/:id', deleteAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
-    app.get('/location/delete/:id', deleteLocationMW(objRepo), renderMW(objRepo, 'location'));
+    app.use('/adventure/edit/:id', loadAdventureMW(objRepo), saveAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.use('/location/edit/:id', loadLocationMW(objRepo), saveLocationMW(objRepo), renderMW(objRepo, 'location'));
+    app.use('/adventure/new', saveAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.use('/location/new', saveLocationMW(objRepo), renderMW(objRepo, 'location'));
+    app.use('/adventure/delete/:id', loadAdventureMW(objRepo), deleteAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
+    app.use('/location/delete/:id', loadLocationMW(objRepo), deleteLocationMW(objRepo), renderMW(objRepo, 'location'));
 
     app.use((err, req, res, next) => {
         console.log(err);

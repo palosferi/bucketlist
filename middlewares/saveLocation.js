@@ -5,7 +5,12 @@
  */
 module.exports = (objRepo) => {
     return (req, res, next)=>{
-        const newLocation = objRepo.LocationModel();
+        if(typeof req.body.name === 'undefined' || typeof req.body.country === 'undefined' || typeof req.body.latitude === 'undefined'
+            || typeof req.body.longitude === 'undefined' || typeof req.body.link === 'undefined')
+             return next();
+        let newLocation = objRepo.LocationModel();
+        if(typeof res.locals.location !== 'undefined') 
+            newLocation = res.locals.location;
         newLocation.name = req.body.name;
         newLocation.country = req.body.country;
         newLocation.latitude = req.body.latitude;
