@@ -14,15 +14,16 @@
                 </tr>
             </thead>
             <tbody>
-                <%= for (let i = 0; i < adventures.length; i++) { adventure= adventures[i]; } %>
+                <% for (let i = 0; i < locations.length; i++) {
+                    const location = locations[i]; %>
                 <tr>
-                    <td><a href="/location/edit/<%= adventure._id %>"><%= location.name %></a></td>
+                    <td><a href="/location/edit/<%= location._id %>"><%= location.name %></a></td>
                     <td><%= location.country %></td>
                     <td><%= location.latitude %></td>
                     <td><%= location.longitude %></td>
-                    <td><a href="<%= location.google-maps %>">Google Maps</a></td>
+                    <td><a href="<%= location.googleMaps %>">Google Maps</a></td>
                 </tr>
-                <%= } %>
+                <% } %>
             </tbody>
         </table>
     </main>

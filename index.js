@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const PORT = 3000;
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
@@ -12,6 +11,6 @@ subscribeToRoutes(app);
 
 app.use(express.static('public'));
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(3000, () => {
+    console.log(`Server is running at http://localhost:3000`);
 });

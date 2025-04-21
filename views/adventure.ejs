@@ -1,30 +1,30 @@
 <%- include('header') %>
-    <main>
-        <form onsubmit="event.preventDefault(); window.location.href='/';">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" value="<%= typeof location === 'undefined' ? "" : adventure.name %>">
-            </div>
-            <div class="form-group">
-                <label for="type">Type:</label>
-                <input type="text" id="type" value="<%= adventure.type %>">
-            </div>
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" value="<%= adventure.date %>">
-            </div>
-            <div class="form-group">
-                <label for="location">Location:</label>
-                <input type="text" id="location" value="<%= adventure.location %>">
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description"></textarea value="<%= adventure.description %>">
-            </div>
-            <div class="button-container">
-                <button type="submit" class="button">Save</button>
-                <button type="button" class="button delete" onclick="window.location.href='/';">Delete</button>
-            </div>
-        </form>
-    </main>
+<main>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= adventure ? adventure.name : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" value="<%= adventure ? adventure.type : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="<%= adventure ? adventure.date : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="<%= adventure ? adventure.location : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"><%= adventure ? adventure.description : '' %></textarea>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="button">Save</button>
+            <button type="button" class="button delete" onclick="window.location.href='/';">Delete</button>
+        </div>
+    </form>
+</main>
 <%- include('footer') %>

@@ -9,7 +9,7 @@ module.exports = (objRepo) => {
         return AdventureModel.findOne({
             _id: req.params.id
         }).then(adventure => {
-            if(torpe === null)
+            if(adventure === null)
                 return res.redirect("/");
             res.locals.adventure = adventure;
             return next();

@@ -9,7 +9,7 @@ module.exports = (objRepo) => {
         return LocationModel.findOne({
             _id: req.params.id
         }).then(location => {
-            if(torpe === null)
+            if(location === null)
                 return res.redirect("/");
             res.locals.location = location;
             return next();

@@ -10,9 +10,13 @@ const deleteLocationMW = require('../middlewares/deleteLocation');
 const renderMW = require('../middlewares/render');
 
 const AdventureModel = require('../models/adventure');
+const LocationModel = require('../models/location');
 
 function subscribeToRoutes(app) {
-    const objRepo = {AdventureModel : AdventureModel};
+    const objRepo = {
+        AdventureModel : AdventureModel,
+        LocationModel: LocationModel
+    };
     app.get('/', loadAdventuresMW(objRepo), renderMW(objRepo, 'adventures'));
     app.get('/locations', loadLocationsMW(objRepo), renderMW(objRepo, 'locations'));
     app.use('/adventure/edit/:id', loadAdventureMW(objRepo), saveAdventureMW(objRepo), renderMW(objRepo, 'adventure'));
@@ -23,7 +27,7 @@ function subscribeToRoutes(app) {
     app.use('/location/delete/:id', loadLocationMW(objRepo), deleteLocationMW(objRepo), renderMW(objRepo, 'location'));
 
     app.use((err, req, res, next) => {
-        console.log(err);
+        console.error("Error occurred:", err.stack || err);
         res.end("hiba");
     })
 }
