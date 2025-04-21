@@ -18,13 +18,15 @@
                 <input type="text" id="longitude" name="longitude" value="<%= typeof location === 'undefined' ? "" : location.longitude %>">
             </div>
             <div class="form-group">
-                <label for="googleMaps">Link:</label>
-                <textarea id="googleMaps" name="googleMaps"><%= typeof location === 'undefined' ? "" : location.googleMaps %></textarea>
+                <label for="link">Link:</label>
+                <textarea id="link" name="link"><%= typeof location === 'undefined' ? "" : location.link %></textarea>
             </div>
             <div class="button-container">
                 <button type="submit" class="button">Save</button>
-                <button type="button" class="button delete" onclick="window.location.href='/locations';">Delete</button>
             </div>
+        </form>
+        <form method="POST" action="/location/delete/<%= location._id %>">
+            <button type="submit" class="button delete">Delete</button>
         </form>
     </main>
 <%- include('footer') %>

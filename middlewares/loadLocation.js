@@ -10,7 +10,7 @@ module.exports = (objRepo) => {
             _id: req.params.id
         }).then(location => {
             if(location === null)
-                return res.redirect("/");
+                return res.redirect("/adventures");
             res.locals.location = location;
             return next();
         }).catch(next);

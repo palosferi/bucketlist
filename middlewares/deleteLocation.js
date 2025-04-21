@@ -6,7 +6,7 @@
 module.exports = (objRepo) => {
     return (req, res, next)=>{
         return res.locals.location.deleteOne().then(() => {
-            return res.redirect("/");
+            return res.redirect("/locations");
         }).catch(next);
     }
 }
