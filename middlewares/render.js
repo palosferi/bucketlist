@@ -5,10 +5,12 @@
  * @returns {function(*, *, *): * }
  */
 module.exports = (objRepo, view) => {
-    return (req, res, next)=>{
-        if (typeof res.locals.adventure === 'undefined') {
-            res.locals.adventure = {};
-        }
-        res.render(view,res.locals);
-    }
-}
+    return (req, res, next) => {
+      if (typeof res.locals[view] === 'undefined') {
+        res.locals[view] = {};
+      }
+      res.render(view, res.locals);
+    };
+  };
+  
+  

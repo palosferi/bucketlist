@@ -1,6 +1,6 @@
 <%- include('header') %>
 <main>
-    <form method="POST" action="">
+    <form method="POST" action="<%= adventure ? '/adventure/edit/' + adventure._id : '/adventure/new' %>">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="<%= adventure ? adventure.name : '' %>">
@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label for="_location">Location:</label>
-            <select name="_location">
+            <select name="location">
                 <% locations.forEach(loc => { %>
                   <option value="<%= loc._id %>"><%= loc.name %></option>
                 <% }) %>

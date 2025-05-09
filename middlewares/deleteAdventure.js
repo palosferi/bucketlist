@@ -4,9 +4,18 @@
  * @returns {function(*, *, *): * }
  */
 module.exports = (objRepo) => {
-    return (req, res, next)=>{
-        return res.locals.adventure.deleteOne().then(() => {
-            return res.redirect("/adventures");
-        }).catch(next);
+  const AdventureModel = objRepo.AdventureModel;
+  return async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      if (!id) {
+        return res.redirect('/adventures');
+      }
+
+      await AdventureModel.deleteOne({ _id: id });
+      return res.redirect('/adventures');
+    } catch (err) {
+      return next(err);
     }
-}
+  };
+};
