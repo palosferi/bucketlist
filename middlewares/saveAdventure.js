@@ -12,14 +12,14 @@ module.exports = (objRepo) => {
             typeof req.body.date === 'undefined' ||
             typeof req.body._location === 'undefined' ||
             typeof req.body.description === 'undefined'
-        ) return res.redirect("/adventures");
+        ) return next();
 
         let adventure = res.locals.adventure || new AdventureModel();
         
         adventure.name = req.body.name;
         adventure.type = req.body.type;
         adventure.date = req.body.date;
-        adventure._location = req.body.location;
+        adventure._location = req.body._location;
         adventure.description = req.body.description;
 
         return adventure.save().then(() => {

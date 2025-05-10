@@ -5,13 +5,10 @@
  */
 module.exports = (objRepo) => {
   const LocationModel = objRepo.LocationModel;
-  return async (req, res, next) => {
-    try {
-      const locations = await LocationModel.find({});
-      res.locals.locations = locations;
-      next();
-    } catch (err) {
-      next(err);
-    }
-  };
-};
+  return (req, res, next)=>{
+      return LocationModel.find({}).then(locations => {
+          res.locals.locations = locations;
+          return next();
+      }).catch(next);
+  }
+}

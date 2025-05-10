@@ -20,7 +20,15 @@
                     <td><a href="/adventure/edit/<%= adventure._id %>"><%= adventure.name %></a></td>
                     <td><%= adventure.type %></td>
                     <td><%= adventure.date %></td>
-                    <td><a href="/location/edit/<%= adventure._id %>"><%= adventure._location?.name || 'Unknown' %></a></td>
+                    <td>
+                        <% if (adventure._location) { %>
+                          <a href="/location/edit/<%= adventure._location._id %>">
+                            <%= adventure._location.name %>
+                          </a>
+                        <% } else { %>
+                          unknown
+                        <% } %>
+                      </td>
                     <td><%= adventure.description %></td>
                 </tr>
             <% } %>

@@ -1,6 +1,6 @@
 <%- include('header') %>
 <main>
-    <form method="POST" action="<%= location ? '/location/edit/' + location._id : '/location/new' %>">
+    <form method="POST" action="<%= location._id ? '/location/edit/' + location._id : '/location/new' %>">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="<%= location ? location.name : '' %>">

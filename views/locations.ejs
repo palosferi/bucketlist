@@ -1,30 +1,30 @@
 <%- include('header') %>
-    <main>
-        <div class="button-container">
-            <a href="/location/new" class="button">New Location</a>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let i = 0; i < locations.length; i++) {
-                    const location = locations[i]; %>
-                <tr>
-                    <td><a href="/location/edit/<%= location._id %>"><%= location.name %></a></td>
-                    <td><%= location.country %></td>
-                    <td><%= location.latitude %></td>
-                    <td><%= location.longitude %></td>
-                    <td><a href="<%= location.link %>">Google Maps</a></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </main>
+<main>
+    <div class="button-container">
+        <a href="/location/new" class="button">New Location</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < locations.length; i++) {
+                const location = locations[i]; %>
+            <tr>
+                <td><a href="/location/edit/<%= location._id %>"><%= location.name %></a></td>
+                <td><%= location.country %></td>
+                <td><%= location.latitude %></td>
+                <td><%= location.longitude %></td>
+                <td><a href="<%= location.link %>" target="_blank">Google Maps</a></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</main>
 <%- include('footer') %>
