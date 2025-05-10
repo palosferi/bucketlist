@@ -23,12 +23,22 @@
         </div>
         <div class="button-container">
             <button type="submit" class="button">Save</button>
-        </div>
-    </form>
-    <% if (typeof location !== 'undefined') { %>
-        <form method="POST" action="/location/delete/<%= location._id %>">
-            <button type="submit" class="button delete">Delete</button>
+            <% if (location && location._id) { %>
+                <button 
+                  type="submit" 
+                  class="button delete"
+                  formaction="/location/delete/<%= location._id %>"
+                  formmethod="POST"
+                  formnovalidate
+                >
+                  Delete
+                </button>
+              <% } else { %>
+                <a href="/locations" class="button delete">
+                  Cancel
+                </a>
+              <% } %>
+            </div>
         </form>
-    <% } %>
 </main>
 <%- include('footer') %>

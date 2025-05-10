@@ -18,8 +18,8 @@ module.exports = (objRepo) => {
       
       location.name      = req.body.name;
       location.country   = req.body.country;
-      location.latitude  = req.body.latitude;
-      location.longitude = req.body.longitude;
+      location.latitude  = parseInt(req.body.latitude, 10);
+      location.longitude = parseInt(req.body.longitude, 10);
       location.link      = req.body.link;
 
       return location.save().then(() => {
