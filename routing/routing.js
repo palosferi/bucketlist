@@ -1,12 +1,12 @@
 
-const loadAdventuresMW = require('../middlewares/loadAdventures');
-const loadLocationsMW = require('../middlewares/loadLocations');
-const loadAdventureMW = require('../middlewares/loadAdventure');
-const loadLocationMW = require('../middlewares/loadLocation');
-const saveAdventureMW = require('../middlewares/saveAdventure');
-const saveLocationMW = require('../middlewares/saveLocation');
-const deleteAdventureMW = require('../middlewares/deleteAdventure');
-const deleteLocationMW = require('../middlewares/deleteLocation');
+const loadAdventuresMW = require('../middlewares/adventures/adventures/adventures/adventures/adventures/adventures/adventures/adventures/loadAdventures');
+const loadLocationsMW = require('../middlewares/locations/loadLocations');
+const loadAdventureMW = require('../middlewares/adventures/loadAdventure');
+const loadLocationMW = require('../middlewares/locations/loadLocation');
+const saveAdventureMW = require('../middlewares/adventures/saveAdventure');
+const saveLocationMW = require('../middlewares/locations/saveLocation');
+const deleteAdventureMW = require('../middlewares/adventures/deleteAdventure');
+const deleteLocationMW = require('../middlewares/locations/deleteLocation');
 const renderMW = require('../middlewares/render');
 
 const AdventureModel = require('../models/adventure');
