@@ -1,3 +1,3 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/u1otpn');
+mongoose.connect('mongodb://localhost/bucketlist');
 module.exports = mongoose;
