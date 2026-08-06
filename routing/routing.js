@@ -1,5 +1,5 @@
 
-const loadAdventuresMW = require('../middlewares/adventures/adventures/adventures/adventures/adventures/adventures/adventures/adventures/loadAdventures');
+const loadAdventuresMW = require('../middlewares/adventures/loadAdventures');
 const loadLocationsMW = require('../middlewares/locations/loadLocations');
 const loadAdventureMW = require('../middlewares/adventures/loadAdventure');
 const loadLocationMW = require('../middlewares/locations/loadLocation');
