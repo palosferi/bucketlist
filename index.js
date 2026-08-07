@@ -11,6 +11,7 @@ subscribeToRoutes(app);
 
 app.use(express.static('public'));
 
-app.listen(3000, () => {
-    console.log(`Server is running at http://localhost:3000`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });

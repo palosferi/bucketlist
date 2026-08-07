@@ -1,5 +1,5 @@
 /**
- * db bol az osszes location-t betolti
+ * Loads every location from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

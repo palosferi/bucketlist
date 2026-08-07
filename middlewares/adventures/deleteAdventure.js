@@ -1,5 +1,5 @@
 /**
- * torli az adventure-t a db-bol
+ * Deletes the adventure from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

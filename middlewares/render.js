@@ -1,5 +1,5 @@
 /**
- * ejs-t ad ki
+ * Renders the given ejs view
  * @param objRepo
  * @param view
  * @returns {function(*, *, *): * }

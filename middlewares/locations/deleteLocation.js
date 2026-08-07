@@ -1,5 +1,5 @@
 /**
- * torli a location-t a db-bol
+ * Deletes the location from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

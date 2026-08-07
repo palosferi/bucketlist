@@ -1,5 +1,5 @@
 /**
- * db bol 1 adventure-t betolt
+ * Loads a single adventure from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

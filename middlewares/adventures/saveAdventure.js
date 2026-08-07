@@ -1,5 +1,5 @@
 /**
- * menti az adventure-t a db-be
+ * Saves the adventure to the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

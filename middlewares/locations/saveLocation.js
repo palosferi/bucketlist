@@ -1,5 +1,5 @@
 /**
- * menti a location-t a db-be
+ * Saves the location to the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

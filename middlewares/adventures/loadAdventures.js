@@ -1,5 +1,5 @@
 /**
- * db bol az osszes adventure-t betolti
+ * Loads every adventure from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */

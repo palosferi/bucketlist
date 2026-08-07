@@ -1,5 +1,5 @@
 /**
- * db bol 1 location-t betolt
+ * Loads a single location from the db
  * @param objRepo
  * @returns {function(*, *, *): * }
  */
