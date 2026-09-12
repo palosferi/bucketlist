@@ -1,0 +1,17 @@
+<%- include('header', { pageTitle: 'Signups are closed' }) %>
+<section class="narrow">
+    <h1>Signups are closed</h1>
+    <p>
+        <%= brand %> is a personal project, not an open service — accounts are
+        not being handed out right now.
+    </p>
+    <p>
+        You can still browse any map that has been shared with you, and the
+        whole thing is open source if you would like to run your own copy.
+    </p>
+    <p>
+        <a href="https://github.com/palosferi/bucketlist" class="button">Source on GitHub</a>
+        <a href="<%= u('/login') %>" class="linklike">I have an account</a>
+    </p>
+</section>
+<%- include('footer') %>

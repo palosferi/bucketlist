@@ -1,0 +1,26 @@
+<%- include('header', { pageTitle: 'Choose a new password' }) %>
+<section class="narrow">
+    <% if (!tokenValid) { %>
+        <h1>That link is no longer valid</h1>
+        <p>Reset links expire after an hour and work only once.</p>
+        <p><a href="<%= u('/forgot') %>" class="button">Request a new one</a></p>
+    <% } else { %>
+        <h1>Choose a new password</h1>
+        <%- include('_errors') %>
+        <form method="POST" action="<%= u('/reset') %>" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="token" value="<%= token %>">
+            <div class="form-group">
+                <label for="password">New password</label>
+                <input id="password" name="password" type="password" minlength="10" required autocomplete="new-password">
+                <small>At least 10 characters.</small>
+                <% if (errors.password) { %><span class="error"><%= errors.password %></span><% } %>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="button">Change password</button>
+            </div>
+        </form>
+        <p class="note">Changing your password logs out every other device.</p>
+    <% } %>
+</section>
+<%- include('footer') %>

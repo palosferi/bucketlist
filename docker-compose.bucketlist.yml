@@ -1,0 +1,36 @@
+# Service definitions to fold into the existing ~/server/docker-compose.yml.
+# Both join the same `server_default` network the other services use, so
+# nginx-proxy-manager can reach the app by container name.
+services:
+  bucketlist:
+    build: .
+    # or, once it is published:
+    # image: ghcr.io/palosferi/bucketlist:latest
+    container_name: bucketlist
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGODB_URI=mongodb://bucketlist-mongo:27017/bucketlist
+      - NODE_ENV=production
+      - BASE_PATH=/adventures
+      - PUBLIC_BASE_URL=https://ferencpalos.is-a.dev
+      - SIGNUPS_OPEN=false
+    volumes:
+      - ./data/bucketlist/photos:/data/photos
+    depends_on:
+      - bucketlist-mongo
+    # No published port: nginx-proxy-manager reaches it over the docker
+    # network, so the app is never exposed directly to the LAN.
+    expose:
+      - '3000'
+
+  bucketlist-mongo:
+    image: mongo:7
+    container_name: bucketlist-mongo
+    restart: unless-stopped
+    volumes:
+      - ./data/bucketlist/mongo:/data/db
+    # Likewise unpublished — only the app talks to it.
+    expose:
+      - '27017'
+    command: ['--wiredTigerCacheSizeGB', '0.5']

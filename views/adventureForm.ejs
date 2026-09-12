@@ -1,0 +1,137 @@
+<% var editing = typeof adventure !== 'undefined' && adventure && adventure._id %>
+<% var a = editing ? adventure : {} %>
+<% var v = function (field, fallback) { return form[field] !== undefined ? form[field] : (fallback === undefined ? '' : fallback) } %>
+<%- include('header', { pageTitle: editing ? a.name : 'New adventure' }) %>
+<section class="narrow">
+    <h1><%= editing ? 'Edit adventure' : 'New adventure' %></h1>
+    <%- include('_errors') %>
+
+    <form method="POST" action="<%= editing ? u('/adventures/' + a._id + '/edit') : u('/adventures/new') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" name="name" maxlength="120" required value="<%= v('name', a.name) %>">
+            <% if (errors.name) { %><span class="error"><%= errors.name %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="_list">List</label>
+            <% var currentList = v('_list', a._list ? String(a._list) : (typeof query !== 'undefined' ? query.list : '')) %>
+            <select id="_list" name="_list" required>
+                <% lists.forEach(function (l) { %>
+                    <option value="<%= l._id %>" <%= String(l._id) === String(currentList) ? 'selected' : '' %>><%= l.name %></option>
+                <% }) %>
+            </select>
+            <% if (errors._list) { %><span class="error"><%= errors._list %></span><% } %>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input id="type" name="type" maxlength="40" placeholder="hike, dive, concert…" value="<%= v('type', a.type) %>">
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input id="date" name="date" type="date"
+                       value="<%= v('date', a.date ? a.date.toISOString().slice(0, 10) : '') %>">
+                <% if (errors.date) { %><span class="error"><%= errors.date %></span><% } %>
+            </div>
+        </div>
+
+        <div class="form-group checkbox">
+            <label><input type="checkbox" name="done" <%= (form.done !== undefined ? form.done : a.done) ? 'checked' : '' %>> Already done</label>
+        </div>
+
+        <div class="form-group checkbox">
+            <label>
+                <input type="checkbox" name="shareUndone"
+                       <%= (form.shareUndone !== undefined ? form.shareUndone : a.shareUndone) ? 'checked' : '' %>>
+                Show on my public map before it is done
+            </label>
+        </div>
+        <p class="note">
+            Unfinished adventures stay private by default, even in a public list —
+            a dated plan on a public page says when you will be away from home.
+        </p>
+
+        <fieldset>
+            <legend>Where</legend>
+            <div class="form-group">
+                <label for="country">Country <span class="pill public">public</span></label>
+                <% var selectedCountry = v('country', a.country) %>
+                <select id="country" name="country">
+                    <option value="">— not set —</option>
+                    <% countries.forEach(function (c) { %>
+                        <option value="<%= c.code %>" <%= c.code === selectedCountry ? 'selected' : '' %>><%= c.name %></option>
+                    <% }) %>
+                </select>
+                <% if (errors.country) { %><span class="error"><%= errors.country %></span><% } %>
+                <small>The only location detail that appears on a public list or map.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="placeName">Place <span class="pill private">private</span></label>
+                <input id="placeName" name="placeName" maxlength="160" value="<%= v('placeName', a.placeName) %>">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="latitude">Latitude <span class="pill private">private</span></label>
+                    <input id="latitude" name="latitude" inputmode="decimal" placeholder="47.4979"
+                           value="<%= v('latitude', a.latitude === null || a.latitude === undefined ? '' : a.latitude) %>">
+                    <% if (errors.latitude) { %><span class="error"><%= errors.latitude %></span><% } %>
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude <span class="pill private">private</span></label>
+                    <input id="longitude" name="longitude" inputmode="decimal" placeholder="19.0402"
+                           value="<%= v('longitude', a.longitude === null || a.longitude === undefined ? '' : a.longitude) %>">
+                    <% if (errors.longitude) { %><span class="error"><%= errors.longitude %></span><% } %>
+                </div>
+            </div>
+            <p class="note">Place and coordinates stay private even when the list is public.</p>
+        </fieldset>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="5" maxlength="5000"><%= v('description', a.description) %></textarea>
+            <% if (errors.description) { %><span class="error"><%= errors.description %></span><% } %>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="button">Save</button>
+            <a href="<%= editing ? u('/lists/' + a._list) : u('/lists') %>" class="linklike">Cancel</a>
+        </div>
+    </form>
+
+    <% if (editing) { %>
+        <section class="photos">
+            <h2>Photos</h2>
+            <% if (errors.photos) { %><p class="error-banner"><%= errors.photos %></p><% } %>
+            <div class="photo-grid">
+                <% a.photos.forEach(function (p) { %>
+                    <figure>
+                        <img src="<%= basePath %>/photos/<%= p.filename %>" alt="<%= p.caption %>" loading="lazy">
+                        <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/photos/<%= p._id %>/delete">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="linklike">Remove</button>
+                        </form>
+                    </figure>
+                <% }) %>
+            </div>
+            <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/photos" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="file" name="photos" accept="image/*" multiple>
+                <button type="submit" class="button small">Upload</button>
+                <small>Photos are re-encoded and their GPS data removed on upload.</small>
+            </form>
+        </section>
+
+        <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/delete"
+              onsubmit="return confirm('Delete this adventure?')">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="button delete">Delete adventure</button>
+        </form>
+    <% } %>
+</section>
+<%- include('footer') %>

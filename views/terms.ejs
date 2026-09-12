@@ -1,0 +1,68 @@
+<%- include('header', { pageTitle: 'Terms' }) %>
+<section class="narrow prose">
+    <h1>Terms of use</h1>
+    <p class="meta">Last updated 12 September 2026</p>
+
+    <h2>The short version</h2>
+    <p>
+        <%= brand %> is a free hobby service run by one person on their own
+        hardware. Be decent, do not upload things you have no right to upload,
+        and keep your own backups of anything you would be upset to lose.
+    </p>
+
+    <h2>Your account</h2>
+    <p>
+        You are responsible for what happens under your account and for keeping
+        your password to yourself. You must be old enough to consent to data
+        processing where you live (16 in Hungary).
+    </p>
+
+    <h2>What you upload</h2>
+    <p>
+        You keep ownership of everything you write and upload. By publishing a
+        list you allow the service to display that content to whoever opens the
+        page — nothing more.
+    </p>
+    <p>Do not upload content that:</p>
+    <ul>
+        <li>you do not hold the rights to;</li>
+        <li>is illegal, or depicts abuse of any kind;</li>
+        <li>harasses, impersonates or exposes another person;</li>
+        <li>exists to advertise, spam or mislead.</li>
+    </ul>
+    <p>
+        Accounts posting such material may be removed without notice. Report
+        anything that needs attention through the contact route on the
+        <a href="<%= u('/privacy') %>">privacy page</a>.
+    </p>
+
+    <h2>Limits</h2>
+    <p>
+        Each account gets <%= quotaMb %> MB of photo storage and a cap on photos
+        per adventure. These exist to keep a small server usable for everyone
+        and may change.
+    </p>
+
+    <h2>No warranty</h2>
+    <p>
+        The service is provided as-is, with no guarantee of availability or of
+        data preservation. It may go down, change or shut down. Backups are
+        taken, but export your data from
+        <a href="<%= u('/settings') %>">Settings</a> if it matters to you. To the extent the
+        law allows, the operator is not liable for losses arising from use of
+        the service.
+    </p>
+
+    <h2>Ending it</h2>
+    <p>
+        Delete your account whenever you like from
+        <a href="<%= u('/settings') %>">Settings</a>; it takes effect immediately. The
+        operator may close accounts that break these terms.
+    </p>
+
+    <p class="note">
+        The source code is open under the MIT licence, which covers the code —
+        not this hosted service.
+    </p>
+</section>
+<%- include('footer') %>

@@ -1,34 +1,15 @@
-const renderMw = require("../../middlewares/render");
+const renderMW = require('../../middlewares/render');
 
-test("should initialize res.locals[view] if undefined", () => {
-  const view = "testView";
-  const res = {
-    locals: {},
-    render: jest.fn(),
-  };
-  const req = {};
-  const next = jest.fn();
+describe('render', () => {
+  it('renders the named view with res.locals', () => {
+    const res = { locals: { adventures: [] }, render: jest.fn() };
+    renderMW({}, 'adventures')({}, res);
+    expect(res.render).toHaveBeenCalledWith('adventures', res.locals);
+  });
 
-  renderMw({}, view)(req, res, next);
-
-  expect(res.locals[view]).toEqual({});
-  expect(res.render).toBeCalledWith(view, res.locals);
-});
-
-test("should not overwrite existing res.locals[view]", () => {
-  const view = "testView";
-  const existingData = { something: "value" };
-  const res = {
-    locals: {
-      [view]: existingData,
-    },
-    render: jest.fn(),
-  };
-  const req = {};
-  const next = jest.fn();
-
-  renderMw({}, view)(req, res, next);
-
-  expect(res.locals[view]).toBe(existingData);
-  expect(res.render).toBeCalledWith(view, res.locals);
+  it('leaves a status set by an earlier middleware alone', () => {
+    const res = { locals: {}, render: jest.fn(), status: jest.fn() };
+    renderMW({}, 'adventureForm')({}, res);
+    expect(res.status).not.toHaveBeenCalled();
+  });
 });

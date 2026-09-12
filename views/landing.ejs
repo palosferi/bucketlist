@@ -1,0 +1,28 @@
+<%- include('header', { pageTitle: 'Bucketlist — take you places' }) %>
+<section class="hero">
+    <h1>Take you places.</h1>
+    <p class="lead">
+        Keep a private list of the things you want to do — and the ones you have
+        already done. Share a list with the people you will do it with, or put a
+        map of your adventures online.
+    </p>
+    <p>
+        <% if (signupsOpen) { %>
+            <a href="<%= u('/signup') %>" class="button">Start a list</a>
+            <a href="<%= u('/login') %>" class="button ghost">Log in</a>
+        <% } else { %>
+            <a href="<%= u('/u/feri') %>" class="button">See the map</a>
+            <a href="<%= u('/login') %>" class="button ghost">Log in</a>
+        <% } %>
+    </p>
+</section>
+<section class="narrow">
+    <h2>Private unless you say otherwise</h2>
+    <p>
+        Every list starts private. When you publish one, only the country of each
+        adventure goes public — never the exact place or coordinates you noted
+        down for yourself, and photos are stripped of their location data on
+        upload.
+    </p>
+</section>
+<%- include('footer') %>

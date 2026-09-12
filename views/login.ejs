@@ -1,0 +1,21 @@
+<%- include('header', { pageTitle: 'Log in' }) %>
+<section class="narrow">
+    <h1>Log in</h1>
+    <%- include('_errors') %>
+    <form method="POST" action="<%= u('/login') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required value="<%= form.email || '' %>">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="button">Log in</button>
+            <a href="<%= u('/signup') %>" class="linklike">Create an account</a>
+        </div>
+    </form>
+</section>
+<%- include('footer') %>

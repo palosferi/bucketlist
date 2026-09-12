@@ -1,0 +1,72 @@
+<%- include('header', { pageTitle: 'Privacy' }) %>
+<section class="narrow prose">
+    <h1>Privacy</h1>
+    <p class="meta">Last updated 12 September 2026</p>
+
+    <p>
+        <%= brand %> is run by a private individual in Hungary. This page
+        describes what it stores, why, and how to get rid of it.
+    </p>
+
+    <h2>What is stored</h2>
+    <ul>
+        <li><strong>Your email address</strong> — to log you in, confirm your account and reset your password. It is never shown publicly and never shared.</li>
+        <li><strong>Your display name and handle</strong> — both appear on your public page if you publish a list.</li>
+        <li><strong>Your password</strong> — only as a bcrypt hash. The original is never written down and cannot be recovered.</li>
+        <li><strong>Your adventures</strong> — names, types, dates, descriptions, countries, and any place names or coordinates you enter.</li>
+        <li><strong>Your photos</strong> — re-encoded on upload. Location and camera metadata are removed in the process and the original file is discarded.</li>
+        <li><strong>Session cookies</strong> — one cookie, <code>bl.sid</code>, so you stay logged in. There is no analytics, no advertising and no third-party tracking of any kind.</li>
+    </ul>
+
+    <h2>What is public</h2>
+    <p>
+        Lists are private when created. If you set one to public or share it by
+        link, these become visible to anyone who opens it: the adventure's name,
+        type, date, description, <strong>country</strong>, and photos.
+    </p>
+    <p>
+        These stay private in every case: your email address, the free-text
+        place name, and the exact latitude and longitude. Adventures you have
+        not marked as done are also withheld unless you explicitly opt them in.
+    </p>
+
+    <h2>Who else sees it</h2>
+    <p>
+        The service runs on hardware owned by its operator. Two third parties
+        are involved: <a href="https://www.cloudflare.com/">Cloudflare</a>,
+        which carries traffic to the site, and
+        <a href="https://resend.com/">Resend</a>, which delivers confirmation
+        and password-reset email and therefore processes your email address.
+        Nothing is sold, and nothing is shared for advertising.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+        Under the GDPR you may see your data, take it elsewhere, correct it or
+        delete it. The first two are self-service: <a href="<%= u('/settings') %>">Settings</a>
+        has an export that gives you everything as a JSON file, and a delete
+        button that removes your account, lists, adventures and photos
+        immediately and irreversibly. No request or waiting period.
+    </p>
+
+    <h2>Retention</h2>
+    <p>
+        Data is kept until you delete it. Verification and reset tokens expire
+        automatically after 24 hours and 1 hour respectively. Backups are kept
+        for 30 days, so a deleted account may persist in an encrypted backup for
+        up to that long before ageing out.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+        <% if (contactEmail) { %>
+            Questions or complaints: <a href="mailto:<%= contactEmail %>"><%= contactEmail %></a>.
+        <% } else { %>
+            Questions or complaints: open an issue on
+            <a href="https://github.com/palosferi/bucketlist">the GitHub repository</a>.
+        <% } %>
+        You also have the right to complain to the Hungarian data protection
+        authority (NAIH).
+    </p>
+</section>
+<%- include('footer') %>

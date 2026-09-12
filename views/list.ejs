@@ -1,0 +1,24 @@
+<%- include('header', { pageTitle: list.name }) %>
+<section>
+    <div class="page-head">
+        <div>
+            <h1><%= list.name %></h1>
+            <p class="meta"><span class="badge <%= list.visibility %>"><%= list.visibility %></span></p>
+        </div>
+        <div>
+            <a href="<%= basePath %>/adventures/new?list=<%= list._id %>" class="button">New adventure</a>
+            <a href="<%= basePath %>/lists/<%= list._id %>/edit" class="linklike">Settings</a>
+        </div>
+    </div>
+
+    <% if (!adventures.length) { %>
+        <p class="empty">Nothing here yet. Add the first thing you want to do.</p>
+    <% } else { %>
+        <ul class="adventure-list">
+            <% adventures.forEach(function (adventure) { %>
+                <%- include('_adventureRow', { adventure: adventure }) %>
+            <% }) %>
+        </ul>
+    <% } %>
+</section>
+<%- include('footer') %>
