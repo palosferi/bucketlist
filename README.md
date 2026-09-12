@@ -224,17 +224,37 @@ npm run gen:map         # refreshes public/world-50m.json from world-atlas
 
 ## Deploying
 
-A `Dockerfile` and `docker-compose.bucketlist.yml` are included. The compose
-file defines the app and its own MongoDB, both on an existing Docker network so
-a reverse proxy can reach the app by container name; neither publishes a port
+`docker-compose.bucketlist.yml` defines the app and its own MongoDB. Both join
+an existing external Docker network so a reverse proxy can reach the app by
+container name, and neither publishes a port, so nothing is exposed to the LAN
 directly.
 
 ```sh
-cp .env.example .env    # set SESSION_SECRET
+cp .env.example .env    # set SESSION_SECRET and PUBLIC_BASE_URL
 docker compose -f docker-compose.bucketlist.yml up -d --build
+docker compose -f docker-compose.bucketlist.yml exec bucketlist \
+  node scripts/createUser.js --email you@example.com --handle you --verified
 ```
 
-Then point the reverse proxy at `bucketlist:3000`.
+### Serving under a subpath
+
+Set `BASE_PATH=/adventures` and the app mounts itself there: routes, static
+assets, cookies and generated links all move together, and the session cookie is
+scoped to the prefix so it is not sent to anything else on the same origin.
+
+`deploy/nginx-custom-location.conf` is the matching nginx snippet. For Nginx
+Proxy Manager, drop it at `/data/nginx/custom/server_proxy.conf` — that file is
+included in every proxy server block, so the routing survives restarts and
+upgrades without touching NPM's database, and deleting it reverts cleanly.
+
+### Backups
+
+`scripts/backup.sh` run nightly from cron. Restore is a plain `mongorestore`:
+
+```sh
+docker exec -i bucketlist-mongo mongorestore --archive --gzip --drop \
+  < backups/bucketlist/YYYY-MM-DD/mongo.archive.gz
+```
 
 ## License
 
