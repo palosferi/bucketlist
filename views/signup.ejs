@@ -3,7 +3,7 @@
     <h1>Create an account</h1>
     <%- include('_errors') %>
     <form method="POST" action="<%= u('/signup') %>" novalidate>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
 
         <div class="form-group">
             <label for="displayName">Your name</label>

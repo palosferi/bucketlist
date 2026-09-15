@@ -63,6 +63,10 @@ const mongoClientPromise = db.connectToDatabase().then((m) => m.connection.getCl
 // stops Node from treating an early rejection as fatal before we get there.
 mongoClientPromise.catch(() => {});
 
+// Registered before the session middleware so the container healthcheck —
+// which runs every 30 seconds forever — never touches the session store.
+app.get(config.path('/healthz'), (req, res) => res.json({ ok: true, uptime: process.uptime() }));
+
 const SESSION_SECRET = config.sessionSecret;
 if (isProd && (!SESSION_SECRET || SESSION_SECRET.length < 32)) {
   console.error('[boot] SESSION_SECRET must be set to at least 32 characters in production.');

@@ -91,9 +91,6 @@ function subscribeToRoutes(app) {
     return res.render('landing', res.locals);
   });
 
-  // Cheap liveness probe for uptime monitoring; no database work on purpose.
-  app.get('/healthz', (req, res) => res.json({ ok: true, uptime: process.uptime() }));
-
   app.get('/privacy', renderMW(objRepo, 'privacy'));
   app.get('/terms', renderMW(objRepo, 'terms'));
 

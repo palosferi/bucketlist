@@ -7,7 +7,7 @@
     <%- include('_errors') %>
 
     <form method="POST" action="<%= editing ? u('/adventures/' + a._id + '/edit') : u('/adventures/new') %>" novalidate>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
 
         <div class="form-group">
             <label for="name">Name</label>
@@ -113,14 +113,14 @@
                     <figure>
                         <img src="<%= basePath %>/photos/<%= p.filename %>" alt="<%= p.caption %>" loading="lazy">
                         <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/photos/<%= p._id %>/delete">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
                             <button type="submit" class="linklike">Remove</button>
                         </form>
                     </figure>
                 <% }) %>
             </div>
             <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/photos" enctype="multipart/form-data">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
                 <input type="file" name="photos" accept="image/*" multiple>
                 <button type="submit" class="button small">Upload</button>
                 <small>Photos are re-encoded and their GPS data removed on upload.</small>
@@ -129,7 +129,7 @@
 
         <form method="POST" action="<%= basePath %>/adventures/<%= a._id %>/delete"
               onsubmit="return confirm('Delete this adventure?')">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
             <button type="submit" class="button delete">Delete adventure</button>
         </form>
     <% } %>

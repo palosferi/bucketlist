@@ -26,7 +26,7 @@
                 Private lists work without it.
             </p>
             <form method="POST" action="<%= u('/verify/resend') %>">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
                 <button type="submit" class="button small">Send me a new link</button>
             </form>
         </div>
@@ -34,7 +34,7 @@
 
     <h2>Change password</h2>
     <form method="POST" action="<%= u('/settings/password') %>" novalidate>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
         <div class="form-group">
             <label for="currentPassword">Current password</label>
             <input id="currentPassword" name="currentPassword" type="password" required autocomplete="current-password">
@@ -59,7 +59,7 @@
     </p>
     <form method="POST" action="<%= u('/settings/delete') %>" novalidate
           onsubmit="return confirm('Permanently delete your account and everything in it?')">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
         <div class="form-group">
             <label for="deletePassword">Your password</label>
             <input id="deletePassword" name="password" type="password" required autocomplete="current-password">

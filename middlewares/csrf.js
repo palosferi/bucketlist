@@ -37,10 +37,18 @@ function csrf() {
   return (req, res, next) => {
     if (!req.session) return next(new Error('csrf() requires a session'));
 
-    if (!req.session.csrfToken) {
-      req.session.csrfToken = crypto.randomBytes(32).toString('base64url');
-    }
-    res.locals.csrfToken = req.session.csrfToken;
+    // A function, not a value: writing to the session marks it dirty, which
+    // defeats saveUninitialized:false and grows the store by one document per
+    // anonymous hit — crawlers, public pages and the healthcheck included.
+    // A getter is not enough, because res.render enumerates res.locals and
+    // would trip it on every rendered page; a function is copied by reference
+    // and only mints when a template actually calls it to fill in a form.
+    res.locals.csrfToken = () => {
+      if (!req.session.csrfToken) {
+        req.session.csrfToken = crypto.randomBytes(32).toString('base64url');
+      }
+      return req.session.csrfToken;
+    };
 
     if (SAFE_METHODS.has(req.method)) return next();
 

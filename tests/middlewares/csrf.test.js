@@ -14,12 +14,30 @@ function ctx({ method = 'POST', body = {}, session = {}, headers = {} } = {}) {
 }
 
 describe('csrf', () => {
-  it('mints a token and exposes it to templates', () => {
+  it('exposes a token function to templates', () => {
     const { req, res, next } = ctx({ method: 'GET' });
     csrf()(req, res, next);
-    expect(res.locals.csrfToken).toEqual(expect.any(String));
-    expect(res.locals.csrfToken.length).toBeGreaterThan(20);
+    expect(typeof res.locals.csrfToken).toBe('function');
+    expect(res.locals.csrfToken()).toEqual(expect.any(String));
+    expect(res.locals.csrfToken().length).toBeGreaterThan(20);
     expect(next).toHaveBeenCalledWith();
+  });
+
+  it('does not touch the session until the token is actually read', () => {
+    // Writing to the session marks it dirty and makes the store grow by one
+    // document per anonymous request.
+    const { req, res, next } = ctx({ method: 'GET' });
+    csrf()(req, res, next);
+    expect(req.session.csrfToken).toBeUndefined();
+
+    res.locals.csrfToken();
+    expect(req.session.csrfToken).toEqual(expect.any(String));
+  });
+
+  it('returns the same token on repeated reads within a request', () => {
+    const { req, res, next } = ctx({ method: 'GET' });
+    csrf()(req, res, next);
+    expect(res.locals.csrfToken()).toBe(res.locals.csrfToken());
   });
 
   it('lets a GET through without a token', () => {

@@ -4,7 +4,7 @@
     <h1><%= editing ? 'List settings' : 'New list' %></h1>
     <%- include('_errors') %>
     <form method="POST" action="<%= editing ? u('/lists/' + list._id + '/edit') : u('/lists/new') %>" novalidate>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
         <div class="form-group">
             <label for="name">Name</label>
             <input id="name" name="name" maxlength="80" required
@@ -38,7 +38,7 @@
     <% if (editing && !list.isDefault) { %>
         <form method="POST" action="<%= basePath %>/lists/<%= list._id %>/delete"
               onsubmit="return confirm('Delete this list and everything in it?')">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
             <button type="submit" class="button delete">Delete list</button>
         </form>
     <% } %>
