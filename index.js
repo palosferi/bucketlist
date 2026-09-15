@@ -131,7 +131,15 @@ const router = express.Router();
 
 router.use(
   express.static(path.join(__dirname, 'public'), {
-    maxAge: isProd ? '7d' : 0,
+    // no-cache means "revalidate before using", not "do not store": the
+    // browser still caches, but checks with an If-None-Match and gets a cheap
+    // 304 when nothing changed. A long max-age here meant a deploy could not
+    // reach anyone who had already loaded the page until the week was up,
+    // which is indistinguishable from the app being broken.
+    maxAge: 0,
+    etag: true,
+    lastModified: true,
+    setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache'),
   })
 );
 
