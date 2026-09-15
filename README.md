@@ -217,6 +217,19 @@ npm run test-coverage
 Tests mock `objRepo` and the Express `req`/`res` objects, so no MongoDB
 instance is needed.
 
+## Recovering an account
+
+With signups closed there is no mail provider, so the emailed reset cannot
+deliver. Recover from the command line instead:
+
+```sh
+docker compose -f docker-compose.bucketlist.yml exec bucketlist \
+  node scripts/resetPassword.js --email you@example.com
+```
+
+It prints a generated password once and logs out every existing session, the
+same as the emailed flow.
+
 ## Regenerating generated files
 
 ```sh
