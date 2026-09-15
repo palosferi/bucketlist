@@ -21,7 +21,7 @@
                     </div>
                     <div class="meta">
                         <% if (a.country) { %><%= countryName(a.country) %><% } %>
-                        <% if (a.date) { %> · <%= new Date(a.date).toISOString().slice(0, 10) %><% } %>
+                        <% if (a.date) { %> · <%= formatMonth(a.date) %><% } %>
                     </div>
                     <% if (a.description) { %><p><%= a.description %></p><% } %>
                     <% if (a.photos.length) { %>

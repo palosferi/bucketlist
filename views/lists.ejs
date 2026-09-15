@@ -2,7 +2,9 @@
 <section>
     <div class="page-head">
         <h1>My lists</h1>
-        <a href="<%= u('/lists/new') %>" class="button">New list</a>
+        <div class="page-actions">
+            <a href="<%= u('/lists/new') %>" class="button">New list</a>
+        </div>
     </div>
     <%- include('_errors') %>
     <ul class="card-grid">

@@ -5,6 +5,7 @@ const verifyEmailMW = require('../middlewares/auth/verifyEmail');
 const sendVerificationMW = require('../middlewares/auth/sendVerification');
 const requestResetMW = require('../middlewares/auth/requestReset');
 const resetPasswordMW = require('../middlewares/auth/resetPassword');
+const updateProfileMW = require('../middlewares/account/updateProfile');
 const changePasswordMW = require('../middlewares/account/changePassword');
 const exportDataMW = require('../middlewares/account/exportData');
 const deleteAccountMW = require('../middlewares/account/deleteAccount');
@@ -37,6 +38,7 @@ const { verifyCsrf } = require('../middlewares/csrf');
 const photoStoreLib = require('../lib/photoStore');
 const { COUNTRIES, countryName, ALPHA2_TO_NUMERIC } = require('../lib/countries');
 const { COLORS, colorHex } = require('../lib/colors');
+const { formatMonth, toMonthInput } = require('../lib/dates');
 const config = require('../lib/config');
 
 const UserModel = require('../models/user');
@@ -68,6 +70,8 @@ function subscribeToRoutes(app) {
     res.locals.countryName = countryName;
     res.locals.colors = COLORS;
     res.locals.colorHex = colorHex;
+    res.locals.formatMonth = formatMonth;
+    res.locals.toMonthInput = toMonthInput;
     res.locals.alpha2ToNumeric = ALPHA2_TO_NUMERIC;
     res.locals.query = req.query;
     res.locals.errors = {};
@@ -126,6 +130,7 @@ function subscribeToRoutes(app) {
 
   // --- account settings ------------------------------------------------------
   app.get('/settings', requireAuth, renderMW(objRepo, 'settings'));
+  app.post('/settings/profile', requireAuth, updateProfileMW(objRepo), renderMW(objRepo, 'settings'));
   app.post('/settings/password', requireAuth, changePasswordMW(objRepo), renderMW(objRepo, 'settings'));
   app.get('/settings/export', requireAuth, exportDataMW(objRepo));
   app.post('/settings/delete', requireAuth, deleteAccountMW(objRepo), renderMW(objRepo, 'settings'));

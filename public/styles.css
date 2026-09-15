@@ -65,6 +65,16 @@ h2 { font-size: 1.15rem; }
   flex-wrap: wrap;
   margin-bottom: 1.25rem;
 }
+.page-head > div:first-child { min-width: 0; }
+/* The actions were inline elements separated only by a text space, so a solid
+   button and a plain link collided. */
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
 .meta { color: var(--muted); font-size: 0.875rem; margin: 0; }
 .empty { color: var(--muted); padding: 2rem 0; }
 .note { color: var(--muted); font-size: 0.8125rem; }
@@ -89,7 +99,13 @@ h2 { font-size: 1.15rem; }
 }
 .button:hover { filter: brightness(1.08); }
 .button.small { padding: 0.35rem 0.7rem; font-size: 0.875rem; }
-.button.ghost { background: transparent; color: var(--accent); border-color: var(--line); }
+.button.ghost {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+  font-weight: 500;
+}
+.button.ghost:hover { border-color: var(--accent); color: var(--accent); filter: none; }
 .button.delete { background: transparent; color: var(--danger); border-color: var(--danger); margin-top: 1.5rem; }
 .linklike {
   background: none;
@@ -228,6 +244,8 @@ figcaption { color: var(--muted); font-size: 0.8125rem; margin-top: 0.5rem; }
 
 @media (max-width: 600px) {
   .page-head { flex-direction: column; align-items: stretch; }
+  .page-actions { width: 100%; }
+  .page-actions .button { flex: 1 1 auto; text-align: center; }
   .hero h1 { font-size: 1.8rem; }
 }
 

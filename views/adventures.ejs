@@ -2,7 +2,9 @@
 <section>
     <div class="page-head">
         <h1>All adventures</h1>
-        <a href="<%= u('/adventures/new') %>" class="button">New adventure</a>
+        <div class="page-actions">
+            <a href="<%= u('/adventures/new') %>" class="button">New adventure</a>
+        </div>
     </div>
     <% if (!adventures.length) { %>
         <p class="empty">No adventures yet.</p>

@@ -32,9 +32,9 @@
                 <input id="type" name="type" maxlength="40" placeholder="hike, dive, concert…" value="<%= v('type', a.type) %>">
             </div>
             <div class="form-group">
-                <label for="date">Date</label>
-                <input id="date" name="date" type="date"
-                       value="<%= v('date', a.date ? a.date.toISOString().slice(0, 10) : '') %>">
+                <label for="date">Month</label>
+                <input id="date" name="date" type="month"
+                       value="<%= v('date', toMonthInput(a.date)) %>">
                 <% if (errors.date) { %><span class="error"><%= errors.date %></span><% } %>
             </div>
         </div>

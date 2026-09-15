@@ -18,6 +18,7 @@ Location is split into a public half and a private half:
 | Field | Visibility | Notes |
 | --- | --- | --- |
 | `country` | **public** when the list is | ISO 3166-1 alpha-2, chosen from a fixed list |
+| `date` | public when the list is | month granularity only, never a day |
 | `placeName` | private, always | free text, only the owner sees it |
 | `latitude` / `longitude` | private, always | full decimal precision |
 | photos | follow the adventure's visibility | re-encoded on upload, EXIF/GPS stripped |

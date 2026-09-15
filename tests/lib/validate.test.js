@@ -31,14 +31,23 @@ describe('parseAdventure', () => {
     expect(() => parseAdventure({ name: '   ' })).toThrow(ValidationError);
   });
 
-  it('parses a date into a Date, not a string', () => {
-    const out = parseAdventure({ name: 'x', date: '2025-05-10' });
+  it('parses a month into a Date pinned to the first of that month', () => {
+    const out = parseAdventure({ name: 'x', date: '2019-06' });
     expect(out.date).toBeInstanceOf(Date);
-    expect(out.date.toISOString().slice(0, 10)).toBe('2025-05-10');
+    expect(out.date.toISOString()).toBe('2019-06-01T00:00:00.000Z');
   });
 
-  it('treats a blank date as unset rather than invalid', () => {
+  it('treats a blank month as unset rather than invalid', () => {
     expect(parseAdventure({ name: 'x', date: '' }).date).toBeNull();
+  });
+
+  it('rejects a day-precise date, since adventures are recorded by month', () => {
+    expect(() => parseAdventure({ name: 'x', date: '2025-05-10' })).toThrow(ValidationError);
+  });
+
+  it('rejects an impossible month', () => {
+    expect(() => parseAdventure({ name: 'x', date: '2025-13' })).toThrow(ValidationError);
+    expect(() => parseAdventure({ name: 'x', date: '2025-00' })).toThrow(ValidationError);
   });
 
   it('rejects an unknown country code', () => {

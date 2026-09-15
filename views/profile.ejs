@@ -50,7 +50,7 @@
                 return {
                     name: a.name,
                     type: a.type,
-                    date: a.date ? new Date(a.date).toISOString().slice(0, 10) : null,
+                    date: a.date ? formatMonth(a.date) : null,
                     done: a.done,
                     description: a.description,
                     photos: a.photos.map(function (p) { return p.filename })

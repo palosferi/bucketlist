@@ -5,9 +5,9 @@
             <h1><span class="dot" style="background: <%= colorHex(list.color) %>"></span><%= list.name %></h1>
             <p class="meta"><span class="badge <%= list.visibility %>"><%= list.visibility %></span></p>
         </div>
-        <div>
+        <div class="page-actions">
+            <a href="<%= basePath %>/lists/<%= list._id %>/edit" class="button ghost">List settings</a>
             <a href="<%= basePath %>/adventures/new?list=<%= list._id %>" class="button">New adventure</a>
-            <a href="<%= basePath %>/lists/<%= list._id %>/edit" class="linklike">Settings</a>
         </div>
     </div>
 

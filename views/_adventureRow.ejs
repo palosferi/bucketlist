@@ -6,7 +6,7 @@
     <div class="meta">
         <% if (adventure.country) { %><%= countryName(adventure.country) %><% } %>
         <% if (adventure.placeName) { %> · <span class="private-hint" title="Only you can see this"><%= adventure.placeName %></span><% } %>
-        <% if (adventure.date) { %> · <%= adventure.date.toISOString().slice(0, 10) %><% } %>
+        <% if (adventure.date) { %> · <%= formatMonth(adventure.date) %><% } %>
         <% if (adventure.photos && adventure.photos.length) { %> · <%= adventure.photos.length %> photo<%= adventure.photos.length === 1 ? '' : 's' %><% } %>
         <% if (!adventure.done && !adventure.shareUndone) { %> · <span class="pill private">not public</span><% } %>
     </div>

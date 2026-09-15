@@ -4,17 +4,8 @@
     <%- include('_errors') %>
 
     <dl class="kv">
-        <dt>Name</dt><dd><%= currentUser.displayName %></dd>
-        <dt>Handle</dt><dd>@<%= currentUser.handle %> · <a href="<%= basePath %>/u/<%= currentUser.handle %>">public page</a></dd>
-        <dt>Email</dt>
-        <dd>
-            <%= currentUser.email %>
-            <% if (currentUser.emailVerifiedAt) { %>
-                <span class="badge public">verified</span>
-            <% } else { %>
-                <span class="badge unlisted">unverified</span>
-            <% } %>
-        </dd>
+        <dt>Public map</dt>
+        <dd><a href="<%= u('/u/' + currentUser.handle) %>"><%= u('/u/' + currentUser.handle) %></a></dd>
         <dt>Photo storage</dt>
         <dd><%= (currentUser.storageUsedBytes / 1048576).toFixed(1) %> MB used of <%= quotaMb %> MB</dd>
     </dl>
@@ -31,6 +22,45 @@
             </form>
         </div>
     <% } %>
+
+    <h2>Profile</h2>
+    <form method="POST" action="<%= u('/settings/profile') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+
+        <div class="form-group">
+            <label for="displayName">Name</label>
+            <input id="displayName" name="displayName" maxlength="60" required
+                   value="<%= form.displayName !== undefined ? form.displayName : currentUser.displayName %>">
+            <% if (errors.displayName) { %><span class="error"><%= errors.displayName %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="handle">Handle</label>
+            <input id="handle" name="handle" maxlength="30" required pattern="[a-z0-9-]{3,30}"
+                   value="<%= form.handle !== undefined ? form.handle : currentUser.handle %>">
+            <small>Your public map lives at /u/&lt;handle&gt;. Changing it breaks any link you have already shared.</small>
+            <% if (errors.handle) { %><span class="error"><%= errors.handle %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" maxlength="254" required
+                   value="<%= form.email !== undefined ? form.email : currentUser.email %>">
+            <small>
+                <% if (currentUser.emailVerifiedAt) { %>Verified.<% } else { %>Not verified.<% } %>
+                Changing it needs your password below.
+            </small>
+            <% if (errors.email) { %><span class="error"><%= errors.email %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="profilePassword">Current password <small>(only needed to change your email)</small></label>
+            <input id="profilePassword" name="currentPassword" type="password" autocomplete="current-password">
+            <% if (errors.profilePassword) { %><span class="error"><%= errors.profilePassword %></span><% } %>
+        </div>
+
+        <div class="button-container"><button type="submit" class="button">Save profile</button></div>
+    </form>
 
     <h2>Change password</h2>
     <form method="POST" action="<%= u('/settings/password') %>" novalidate>
