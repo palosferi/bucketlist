@@ -44,7 +44,7 @@ const AdventureModel = require('../models/adventure');
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: photoStoreLib.MAX_UPLOAD_BYTES, files: photoStoreLib.MAX_PHOTOS_PER_ADVENTURE },
+  limits: { fileSize: photoStoreLib.MAX_UPLOAD_BYTES, files: photoStoreLib.MAX_FILES_PER_UPLOAD },
   fileFilter: (req, file, cb) => {
     if (/^image\/(jpeg|png|webp|avif|heic|heif|gif|tiff)$/.test(file.mimetype)) return cb(null, true);
     return cb(Object.assign(new Error('Only image files can be uploaded.'), { status: 400 }));
@@ -75,6 +75,9 @@ function subscribeToRoutes(app) {
     res.locals.u = config.path;
     res.locals.basePath = config.basePath;
     res.locals.signupsOpen = config.signupsOpen;
+    res.locals.featuredHandle = config.featuredHandle;
+    // Absolute origin, so a copied share link works when pasted elsewhere.
+    res.locals.shareBase = config.baseUrl;
     res.locals.contactEmail = config.contactEmail;
     res.locals.quotaMb = Math.round(photoStoreLib.quotaBytes() / 1048576);
     // One-shot flash message, consumed on render.
@@ -146,7 +149,7 @@ function subscribeToRoutes(app) {
     '/adventures/:id/photos',
     requireAuth,
     loadAdventureMW(objRepo),
-    upload.array('photos', photoStoreLib.MAX_PHOTOS_PER_ADVENTURE),
+    upload.array('photos', photoStoreLib.MAX_FILES_PER_UPLOAD),
     // Must follow multer: the token is in the multipart body it just parsed.
     verifyCsrf(),
     uploadPhotosMW(objRepo),

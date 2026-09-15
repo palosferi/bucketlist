@@ -52,15 +52,20 @@ module.exports.consume = async function consume(raw, purpose) {
   const Token = module.exports;
   if (typeof raw !== 'string' || !raw) return null;
 
-  const doc = await Token.findOne({
-    tokenHash: hash(raw),
-    purpose,
-    usedAt: null,
-    expiresAt: { $gt: new Date() },
-  });
+  // findOneAndUpdate, not findOne-then-save: two concurrent requests could
+  // otherwise both see usedAt:null and consume the same token, letting a
+  // single reset link set two different passwords.
+  const doc = await Token.findOneAndUpdate(
+    {
+      tokenHash: hash(raw),
+      purpose,
+      usedAt: null,
+      expiresAt: { $gt: new Date() },
+    },
+    { $set: { usedAt: new Date() } },
+    { new: false }
+  );
   if (!doc) return null;
 
-  doc.usedAt = new Date();
-  await doc.save();
   return doc._user;
 };

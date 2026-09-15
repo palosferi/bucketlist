@@ -11,7 +11,9 @@
             <a href="<%= u('/signup') %>" class="button">Start a list</a>
             <a href="<%= u('/login') %>" class="button ghost">Log in</a>
         <% } else { %>
-            <a href="<%= u('/u/feri') %>" class="button">See the map</a>
+            <% if (featuredHandle) { %>
+                <a href="<%= u('/u/' + featuredHandle) %>" class="button">See the map</a>
+            <% } %>
             <a href="<%= u('/login') %>" class="button ghost">Log in</a>
         <% } %>
     </p>

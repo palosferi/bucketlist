@@ -1,3 +1,4 @@
+const config = require('../../lib/config');
 const bcrypt = require('bcryptjs');
 const TokenModel = require('../../models/token');
 
@@ -40,7 +41,9 @@ module.exports = (objRepo) => {
       await UserModel.deleteOne({ _id: user._id });
 
       return req.session.destroy(() => {
-        res.clearCookie('bl.sid');
+        // Must match the path the cookie was set with, or the browser keeps a
+        // scoped bl.sid behind after the server-side session is gone.
+        res.clearCookie('bl.sid', { path: config.basePath || '/' });
         return res.redirect('/?deleted=1');
       });
     } catch (err) {

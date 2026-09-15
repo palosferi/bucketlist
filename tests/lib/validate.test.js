@@ -7,6 +7,16 @@ describe('parseAdventure', () => {
     expect(out.longitude).toBe(19.0397544);
   });
 
+  it('rejects a number with trailing garbage rather than truncating it', () => {
+    // parseFloat would silently accept "47.5abc" as 47.5.
+    expect(() => parseAdventure({ name: 'x', latitude: '47.5abc' })).toThrow(ValidationError);
+    expect(() => parseAdventure({ name: 'x', longitude: '19deg' })).toThrow(ValidationError);
+  });
+
+  it('still accepts a plain number with surrounding whitespace', () => {
+    expect(parseAdventure({ name: 'x', latitude: '  47.5  ' }).latitude).toBe(47.5);
+  });
+
   it('rejects out-of-range coordinates', () => {
     expect.assertions(2);
     try {

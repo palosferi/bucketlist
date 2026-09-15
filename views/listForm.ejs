@@ -25,7 +25,8 @@
         <% if (editing && list.visibility === 'unlisted' && list.shareToken) { %>
             <div class="form-group">
                 <label>Share link</label>
-                <input readonly value="/shared/<%= list._id %>?t=<%= list.shareToken %>">
+                <input readonly onclick="this.select()"
+                       value="<%= shareBase %><%= basePath %>/shared/<%= list._id %>?t=<%= list.shareToken %>">
             </div>
         <% } %>
 

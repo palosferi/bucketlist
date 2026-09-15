@@ -39,7 +39,11 @@ module.exports = (objRepo) => {
 
       res.type('image/webp');
       // Content is immutable — the filename is random and never reused.
-      res.set('Cache-Control', isOwner ? 'private, max-age=86400' : 'public, max-age=604800, immutable');
+      // Deliberately not a shared-cacheable response. A list can be switched
+      // back to private, or a photo deleted, and an intermediary holding a
+      // week-long immutable copy would keep serving it past the point where
+      // this authorisation check would refuse.
+      res.set('Cache-Control', 'private, max-age=3600, must-revalidate');
       return fs.createReadStream(file).pipe(res);
     } catch (err) {
       return next(err);

@@ -1,3 +1,4 @@
+const config = require('../../lib/config');
 /**
  * Streams everything held about the account as JSON.
  *
@@ -45,7 +46,7 @@ module.exports = (objRepo) => {
           description: a.description,
           // Photo bytes are not inlined; the URLs work while logged in.
           photos: (a.photos || []).map((p) => ({
-            url: `/photos/${p.filename}`,
+            url: config.path(`/photos/${p.filename}`),
             caption: p.caption,
             bytes: p.bytes,
             uploadedAt: p.createdAt,

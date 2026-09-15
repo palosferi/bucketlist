@@ -21,14 +21,20 @@ module.exports = (objRepo) => {
       return next();
     }
 
+    // Tracked so a failure part-way through does not leave written files and
+    // their quota reservations with nothing referencing them.
+    const stored = [];
     try {
       for (const file of files.slice(0, room)) {
-        const stored = await photoStore.store(res.locals.currentUser._id, file.buffer);
-        adventure.photos.push(stored);
+        const photo = await photoStore.store(res.locals.currentUser._id, file.buffer);
+        stored.push(photo);
+        adventure.photos.push(photo);
       }
       await adventure.save();
       return res.redirect(`/adventures/${adventure._id}/edit`);
     } catch (err) {
+      await rollback(photoStore, res.locals.currentUser._id, stored);
+
       if (err.name === 'QuotaError' || err.status === 400) {
         res.status(err.status || 400);
         res.locals.errors = { photos: err.message };
@@ -38,3 +44,16 @@ module.exports = (objRepo) => {
     }
   };
 };
+
+/** Deletes files written during a failed upload and releases their quota. */
+async function rollback(photoStore, userId, stored) {
+  for (const photo of stored) {
+    try {
+      await photoStore.remove(photo.filename);
+      await photoStore.releaseQuota(userId, photo.bytes);
+    } catch (err) {
+      // Best effort: the original failure is the one worth reporting.
+      console.error('[photos] rollback failed for', photo.filename, err.message);
+    }
+  }
+}

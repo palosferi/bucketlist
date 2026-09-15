@@ -72,6 +72,12 @@ if (isProd && (!SESSION_SECRET || SESSION_SECRET.length < 32)) {
   console.error('[boot] SESSION_SECRET must be set to at least 32 characters in production.');
   process.exit(1);
 }
+// Open signups without a mail provider would mean nobody can verify an address
+// or recover an account, and the tokens cannot safely be logged instead.
+if (isProd && config.signupsOpen && !config.resendApiKey) {
+  console.error('[boot] RESEND_API_KEY is required when SIGNUPS_OPEN=true in production.');
+  process.exit(1);
+}
 if (isProd && !process.env.PUBLIC_BASE_URL) {
   console.error('[boot] PUBLIC_BASE_URL must be set in production — email links depend on it.');
   process.exit(1);
