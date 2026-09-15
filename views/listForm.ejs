@@ -12,6 +12,22 @@
             <% if (errors.name) { %><span class="error"><%= errors.name %></span><% } %>
         </div>
         <div class="form-group">
+            <label>Colour</label>
+            <% var selectedColor = form.color || (editing ? list.color : 'blue') %>
+            <div class="swatches">
+                <% colors.forEach(function (c) { %>
+                    <label class="swatch" title="<%= c.name %>">
+                        <input type="radio" name="color" value="<%= c.name %>"
+                               <%= c.name === selectedColor ? 'checked' : '' %>>
+                        <span style="background: <%= c.hex %>"></span>
+                    </label>
+                <% }) %>
+            </div>
+            <small>Used for this list's dot, and to fill its countries on your map.</small>
+            <% if (errors.color) { %><span class="error"><%= errors.color %></span><% } %>
+        </div>
+
+        <div class="form-group">
             <label for="visibility">Who can see it</label>
             <% var vis = form.visibility || (editing ? list.visibility : 'private') %>
             <select id="visibility" name="visibility">

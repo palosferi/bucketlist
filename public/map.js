@@ -15,12 +15,9 @@
     if (c.numeric) byNumeric.set(String(Number(c.numeric)), c);
   });
 
-  // Adventure count drives the fill, so somewhere visited ten times reads
-  // darker than somewhere visited once.
-  var maxCount = d3.max(data.countries, function (c) { return c.adventures.length; }) || 1;
-  var colour = d3.scaleSequential()
-    .domain([0, maxCount])
-    .interpolator(d3.interpolate('#dbeafe', '#1d4ed8'));
+  // Each country takes the colour of the list that contributes most of its
+  // adventures, so the map reads as the lists do rather than as one blue ramp.
+  var DEFAULT_FILL = '#1d4ed8';
 
   var width = 960;
   var height = 500;
@@ -46,7 +43,7 @@
       .attr('d', path)
       .attr('fill', function (d) {
         var hit = byNumeric.get(String(Number(d.id)));
-        return hit ? colour(hit.adventures.length) : 'var(--map-empty, #e9edf2)';
+        return hit ? (hit.color || DEFAULT_FILL) : 'var(--map-empty, #e9edf2)';
       })
       .attr('data-visited', function (d) { return byNumeric.has(String(Number(d.id))) ? 'yes' : 'no'; })
       .style('cursor', function (d) { return byNumeric.has(String(Number(d.id))) ? 'pointer' : 'default'; })
@@ -58,7 +55,8 @@
       .text(function (d) {
         var hit = byNumeric.get(String(Number(d.id)));
         if (!hit) return d.properties && d.properties.name ? d.properties.name : '';
-        return hit.name + ' — ' + hit.adventures.length + ' adventure' + (hit.adventures.length === 1 ? '' : 's');
+        var label = hit.name + ' — ' + hit.adventures.length + ' adventure' + (hit.adventures.length === 1 ? '' : 's');
+        return hit.listName ? label + ' (' + hit.listName + ')' : label;
       });
 
     svg.call(

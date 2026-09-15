@@ -36,6 +36,7 @@ module.exports = (objRepo) => {
       const list = res.locals.list || new ListModel({ _owner: res.locals.currentUser._id });
       list.name = fields.name;
       list.visibility = fields.visibility;
+      list.color = fields.color;
       // An unlisted list needs a token; anything else must not keep one around.
       if (fields.visibility === 'unlisted' && !list.shareToken) {
         list.shareToken = crypto.randomBytes(16).toString('base64url');

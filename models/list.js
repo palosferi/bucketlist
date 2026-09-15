@@ -1,5 +1,6 @@
 const { Schema } = require('mongoose');
 const db = require('../config/db');
+const { DEFAULT_COLOR } = require('../lib/colors');
 
 /**
  * A named collection of adventures.
@@ -23,6 +24,9 @@ const listSchema = new Schema(
     },
     shareToken: { type: String, index: true, sparse: true },
     isDefault: { type: Boolean, default: false },
+    // One of lib/colors.js. Used for the list's dot in the UI and to fill the
+    // countries it contributes to on the public map.
+    color: { type: String, default: DEFAULT_COLOR },
   },
   { timestamps: true }
 );

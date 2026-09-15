@@ -36,6 +36,7 @@ const { verifyCsrf } = require('../middlewares/csrf');
 
 const photoStoreLib = require('../lib/photoStore');
 const { COUNTRIES, countryName, ALPHA2_TO_NUMERIC } = require('../lib/countries');
+const { COLORS, colorHex } = require('../lib/colors');
 const config = require('../lib/config');
 
 const UserModel = require('../models/user');
@@ -65,6 +66,8 @@ function subscribeToRoutes(app) {
   app.use((req, res, next) => {
     res.locals.countries = COUNTRIES;
     res.locals.countryName = countryName;
+    res.locals.colors = COLORS;
+    res.locals.colorHex = colorHex;
     res.locals.alpha2ToNumeric = ALPHA2_TO_NUMERIC;
     res.locals.query = req.query;
     res.locals.errors = {};

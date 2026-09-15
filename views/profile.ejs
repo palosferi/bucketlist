@@ -28,7 +28,8 @@
             <% mapCountries.forEach(function (c) { %>
                 <li>
                     <button type="button" class="country-chip" data-code="<%= c.code %>">
-                        <%= c.name %> <span class="count"><%= c.adventures.length %></span>
+                        <span class="dot" style="background: <%= c.color %>"></span><%= c.name %>
+                        <span class="count"><%= c.adventures.length %></span>
                     </button>
                 </li>
             <% }) %>
@@ -43,6 +44,8 @@
             code: c.code,
             numeric: alpha2ToNumeric[c.code] || null,
             name: c.name,
+            color: c.color,
+            listName: c.listName,
             adventures: c.adventures.map(function (a) {
                 return {
                     name: a.name,
