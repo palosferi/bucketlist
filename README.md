@@ -5,7 +5,9 @@ the ones you have already done, and where in the world they happened. Lists are
 private by default; you can share one by link or publish it to an interactive
 world map on your public profile.
 
-Live map example: `/u/your-handle`.
+Running at **<https://ferencpalos.is-a.dev/adventures>** — the public map lives
+at `/u/<handle>`. Signups there are closed; the whole thing is MIT licensed if
+you want to run your own.
 
 ## How privacy works
 
