@@ -1,0 +1,47 @@
+<% var editing = typeof list !== 'undefined' && list && list._id %>
+<%- include('header', { pageTitle: editing ? 'List settings' : 'New list' }) %>
+<section class="narrow">
+    <h1><%= editing ? 'List settings' : 'New list' %></h1>
+    <%- include('_errors') %>
+    <form method="POST" action="<%= editing ? u('/lists/' + list._id + '/edit') : u('/lists/new') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" name="name" maxlength="80" required
+                   value="<%= form.name || (editing ? list.name : '') %>">
+            <% if (errors.name) { %><span class="error"><%= errors.name %></span><% } %>
+        </div>
+        <div class="form-group">
+            <label for="visibility">Who can see it</label>
+            <% var vis = form.visibility || (editing ? list.visibility : 'private') %>
+            <select id="visibility" name="visibility">
+                <option value="private"  <%= vis === 'private'  ? 'selected' : '' %>>Private — only me</option>
+                <option value="unlisted" <%= vis === 'unlisted' ? 'selected' : '' %>>Unlisted — anyone with the link</option>
+                <option value="public"   <%= vis === 'public'   ? 'selected' : '' %>>Public — shown on my map</option>
+            </select>
+            <small>Public and unlisted lists show the country of each adventure, never the exact place or coordinates.</small>
+        </div>
+
+        <% if (editing && list.visibility === 'unlisted' && list.shareToken) { %>
+            <div class="form-group">
+                <label>Share link</label>
+                <input readonly onclick="this.select()"
+                       value="<%= shareBase %><%= basePath %>/shared/<%= list._id %>?t=<%= list.shareToken %>">
+            </div>
+        <% } %>
+
+        <div class="button-container">
+            <button type="submit" class="button">Save</button>
+            <a href="<%= u('/lists') %>" class="linklike">Cancel</a>
+        </div>
+    </form>
+
+    <% if (editing && !list.isDefault) { %>
+        <form method="POST" action="<%= basePath %>/lists/<%= list._id %>/delete"
+              onsubmit="return confirm('Delete this list and everything in it?')">
+            <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+            <button type="submit" class="button delete">Delete list</button>
+        </form>
+    <% } %>
+</section>
+<%- include('footer') %>

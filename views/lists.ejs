@@ -1,0 +1,21 @@
+<%- include('header', { pageTitle: 'My lists' }) %>
+<section>
+    <div class="page-head">
+        <h1>My lists</h1>
+        <a href="<%= u('/lists/new') %>" class="button">New list</a>
+    </div>
+    <%- include('_errors') %>
+    <ul class="card-grid">
+        <% lists.forEach(function (list) { %>
+            <li class="card">
+                <h2><a href="<%= basePath %>/lists/<%= list._id %>"><%= list.name %></a></h2>
+                <p class="meta">
+                    <%= list.adventureCount %> adventure<%= list.adventureCount === 1 ? '' : 's' %>
+                    · <span class="badge <%= list.visibility %>"><%= list.visibility %></span>
+                </p>
+                <a class="linklike" href="<%= basePath %>/lists/<%= list._id %>/edit">Settings</a>
+            </li>
+        <% }) %>
+    </ul>
+</section>
+<%- include('footer') %>

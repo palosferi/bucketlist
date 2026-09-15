@@ -1,0 +1,52 @@
+# Self-contained stack for the Adventures app.
+#
+# Volumes default to ./data next to this file; set DATA_DIR to put them
+# somewhere else.
+#
+# Deliberately separate from ~/server/docker-compose.yml so the existing
+# services are never touched by a deploy here. It joins that stack's network as
+# an external one, which is all nginx-proxy-manager needs to reach the app by
+# container name.
+services:
+  bucketlist:
+    build: .
+    container_name: bucketlist
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ${DATA_DIR:-./data}/photos:/data/photos
+    depends_on:
+      # Waits for Mongo to actually answer, not just to have been created.
+      # Without the condition the app loses its first connection attempt and
+      # relies on the restart policy to recover.
+      bucketlist-mongo:
+        condition: service_healthy
+    networks:
+      - server_default
+    # No published port: only the reverse proxy reaches it, over the network.
+    expose:
+      - '3000'
+
+  bucketlist-mongo:
+    image: mongo:7
+    container_name: bucketlist-mongo
+    restart: unless-stopped
+    volumes:
+      - ${DATA_DIR:-./data}/mongo:/data/db
+    networks:
+      - server_default
+    expose:
+      - '27017'
+    # This box has 7.7 GB shared with a media stack; cap the cache so Mongo
+    # does not decide it owns half of it.
+    command: ['--wiredTigerCacheSizeGB', '0.5']
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.runCommand({ping:1}).ok']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+networks:
+  server_default:
+    external: true

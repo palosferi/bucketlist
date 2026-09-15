@@ -1,38 +1,17 @@
-<%- include('header') %>
-<main>
-    <div class="button-container">
-        <a href="/adventure/new" class="button">New Adventure</a>
+<%- include('header', { pageTitle: 'All adventures' }) %>
+<section>
+    <div class="page-head">
+        <h1>All adventures</h1>
+        <a href="<%= u('/adventures/new') %>" class="button">New adventure</a>
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (let i = 0; i < adventures.length; i++) { 
-                const adventure = adventures[i]; %>
-                <tr>
-                    <td><a href="/adventure/edit/<%= adventure._id %>"><%= adventure.name %></a></td>
-                    <td><%= adventure.type %></td>
-                    <td><%= adventure.date %></td>
-                    <td>
-                        <% if (adventure._location) { %>
-                          <a href="/location/edit/<%= adventure._location._id %>">
-                            <%= adventure._location.name %>
-                          </a>
-                        <% } else { %>
-                          unknown
-                        <% } %>
-                      </td>
-                    <td><%= adventure.description %></td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
-</main>
+    <% if (!adventures.length) { %>
+        <p class="empty">No adventures yet.</p>
+    <% } else { %>
+        <ul class="adventure-list">
+            <% adventures.forEach(function (adventure) { %>
+                <%- include('_adventureRow', { adventure: adventure }) %>
+            <% }) %>
+        </ul>
+    <% } %>
+</section>
 <%- include('footer') %>

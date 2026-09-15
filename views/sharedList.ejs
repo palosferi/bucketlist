@@ -1,0 +1,39 @@
+<%- include('header', { pageTitle: sharedList.name }) %>
+<section>
+    <div class="page-head">
+        <div>
+            <h1><%= sharedList.name %></h1>
+            <p class="meta">
+                Shared by <a href="<%= basePath %>/u/<%= sharedOwner.handle %>"><%= sharedOwner.displayName %></a>
+            </p>
+        </div>
+    </div>
+
+    <% if (!publicAdventures.length) { %>
+        <p class="empty">This list is empty.</p>
+    <% } else { %>
+        <ul class="adventure-list">
+            <% publicAdventures.forEach(function (a) { %>
+                <li class="adventure <%= a.done ? 'done' : '' %>">
+                    <div class="adventure-main">
+                        <span><%= a.name %></span>
+                        <% if (a.type) { %><span class="tag"><%= a.type %></span><% } %>
+                    </div>
+                    <div class="meta">
+                        <% if (a.country) { %><%= countryName(a.country) %><% } %>
+                        <% if (a.date) { %> · <%= new Date(a.date).toISOString().slice(0, 10) %><% } %>
+                    </div>
+                    <% if (a.description) { %><p><%= a.description %></p><% } %>
+                    <% if (a.photos.length) { %>
+                        <div class="photo-strip">
+                            <% a.photos.forEach(function (p) { %>
+                                <img src="<%= basePath %>/photos/<%= p.filename %>?t=<%= shareToken %>" alt="<%= a.name %>" loading="lazy">
+                            <% }) %>
+                        </div>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</section>
+<%- include('footer') %>

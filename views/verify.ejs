@@ -1,0 +1,13 @@
+<%- include('header', { pageTitle: 'Email confirmation' }) %>
+<section class="narrow">
+    <% if (verifyState === 'ok') { %>
+        <h1>Email confirmed</h1>
+        <p>Your address is verified. You can publish lists and share them now.</p>
+        <p><a href="<%= u('/lists') %>" class="button">Go to my lists</a></p>
+    <% } else { %>
+        <h1>That link did not work</h1>
+        <p>It may have expired, or already been used. Log in and request a new one from your settings.</p>
+        <p><a href="<%= u('/login') %>" class="button">Log in</a></p>
+    <% } %>
+</section>
+<%- include('footer') %>

@@ -1,112 +1,93 @@
-const mw = require("../../../middlewares/adventures/saveAdventure");
+const saveAdventureMW = require('../../../middlewares/adventures/saveAdventure');
 
-const validBody = {
-    name: 'Kilimanjaro',
-    type: 'hiking',
-    date: '2025-07-01',
-    _location: '456',
-    description: 'the roof of Africa'
-};
+const OWNER = '507f1f77bcf86cd799439012';
+const LIST = '507f1f77bcf86cd799439011';
 
-const makeObjRepo = (saveResult = Promise.resolve()) => {
-    const save = jest.fn(() => saveResult);
-    const AdventureModel = jest.fn(function () {
-        this.save = save;
+function makeCtx(body, { adventure } = {}) {
+  const req = { method: 'POST', body };
+  const res = {
+    locals: { currentUser: { _id: OWNER }, errors: {}, form: {}, adventure },
+    status: jest.fn().mockReturnThis(),
+    redirect: jest.fn(),
+  };
+  return { req, res, next: jest.fn() };
+}
+
+describe('saveAdventure', () => {
+  let objRepo;
+  let saved;
+
+  beforeEach(() => {
+    saved = null;
+    objRepo = {
+      ListModel: { findOne: jest.fn() },
+      AdventureModel: jest.fn().mockImplementation(function (attrs) {
+        Object.assign(this, attrs);
+        this.save = jest.fn().mockImplementation(() => {
+          saved = this;
+          return Promise.resolve(this);
+        });
+      }),
+    };
+  });
+
+  it('is a no-op on GET so one chain serves form and submission', async () => {
+    const { req, res, next } = makeCtx({});
+    req.method = 'GET';
+    await saveAdventureMW(objRepo)(req, res, next);
+    expect(next).toHaveBeenCalledWith();
+    expect(objRepo.ListModel.findOne).not.toHaveBeenCalled();
+  });
+
+  it('scopes the target list to the current user', async () => {
+    objRepo.ListModel.findOne.mockResolvedValue({ _id: LIST });
+    const { req, res, next } = makeCtx({ name: 'Dive', _list: LIST, country: 'HU' });
+
+    await saveAdventureMW(objRepo)(req, res, next);
+
+    expect(objRepo.ListModel.findOne).toHaveBeenCalledWith({ _id: LIST, _owner: OWNER });
+    expect(res.redirect).toHaveBeenCalledWith(`/lists/${LIST}`);
+  });
+
+  it("refuses to file an adventure into someone else's list", async () => {
+    objRepo.ListModel.findOne.mockResolvedValue(null); // not owned by this user
+    const { req, res, next } = makeCtx({ name: 'Injected', _list: LIST });
+
+    await saveAdventureMW(objRepo)(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.locals.errors._list).toMatch(/your own lists/);
+    expect(res.redirect).not.toHaveBeenCalled();
+    expect(saved).toBeNull();
+  });
+
+  it('stores coordinates at full precision', async () => {
+    objRepo.ListModel.findOne.mockResolvedValue({ _id: LIST });
+    const { req, res, next } = makeCtx({
+      name: 'Hill', _list: LIST, latitude: '47.4863921', longitude: '19.0397544',
     });
-    return { save, objRepo: { AdventureModel } };
-};
 
-test('saveAdventure should create and save a new adventure', async () => {
-    const { save, objRepo } = makeObjRepo();
-    const req = { body: { ...validBody } };
-    const res = {
-        locals: {},
-        redirect: jest.fn(()=>{})
-    };
-    const next = jest.fn(()=>{});
+    await saveAdventureMW(objRepo)(req, res, next);
 
-    await mw(objRepo)(req, res, next);
+    expect(saved.latitude).toBe(47.4863921);
+    expect(saved.longitude).toBe(19.0397544);
+  });
 
-    expect(objRepo.AdventureModel).toBeCalled();
-    const adventure = objRepo.AdventureModel.mock.instances[0];
-    expect(adventure.name).toBe(validBody.name);
-    expect(adventure.type).toBe(validBody.type);
-    expect(adventure.date).toBe(validBody.date);
-    expect(adventure._location).toBe(validBody._location);
-    expect(adventure.description).toBe(validBody.description);
-    expect(save).toBeCalled();
-    expect(res.redirect).toBeCalledWith("/adventures");
-    expect(next).not.toBeCalled();
-});
+  it('re-renders with a 400 when validation fails', async () => {
+    const { req, res, next } = makeCtx({ name: '', _list: LIST });
+    await saveAdventureMW(objRepo)(req, res, next);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.locals.errors.name).toBeDefined();
+    expect(next).toHaveBeenCalledWith();
+  });
 
-test('saveAdventure should update the adventure already on res.locals', async () => {
-    const { objRepo } = makeObjRepo();
-    const existing = {
-        name: 'old name',
-        save: jest.fn(() => Promise.resolve())
-    };
-    const req = { body: { ...validBody } };
-    const res = {
-        locals: { adventure: existing },
-        redirect: jest.fn(()=>{})
-    };
-    const next = jest.fn(()=>{});
+  it('passes unexpected database errors to next', async () => {
+    const boom = new Error('db is down');
+    objRepo.ListModel.findOne.mockRejectedValue(boom);
+    const { req, res, next } = makeCtx({ name: 'x', _list: LIST });
 
-    await mw(objRepo)(req, res, next);
+    await saveAdventureMW(objRepo)(req, res, next);
 
-    expect(objRepo.AdventureModel).not.toBeCalled();
-    expect(existing.name).toBe(validBody.name);
-    expect(existing.description).toBe(validBody.description);
-    expect(existing.save).toBeCalled();
-    expect(res.redirect).toBeCalledWith("/adventures");
-    expect(next).not.toBeCalled();
-});
-
-test('saveAdventure should skip saving if a field is missing from the body', async () => {
-    const { save, objRepo } = makeObjRepo();
-    const { description, ...incompleteBody } = validBody;
-    const req = { body: incompleteBody };
-    const res = {
-        locals: {},
-        redirect: jest.fn(()=>{})
-    };
-    const next = jest.fn(()=>{});
-
-    await mw(objRepo)(req, res, next);
-
-    expect(save).not.toBeCalled();
-    expect(res.redirect).not.toBeCalled();
-    expect(next).toBeCalled();
-});
-
-test('saveAdventure should skip saving if there is no body', async () => {
-    const { save, objRepo } = makeObjRepo();
-    const req = {};
-    const res = {
-        locals: {},
-        redirect: jest.fn(()=>{})
-    };
-    const next = jest.fn(()=>{});
-
-    await mw(objRepo)(req, res, next);
-
-    expect(save).not.toBeCalled();
-    expect(res.redirect).not.toBeCalled();
-    expect(next).toBeCalled();
-});
-
-test('saveAdventure should pass the error to next if saving fails', async () => {
-    const error = new Error('db is down');
-    const { objRepo } = makeObjRepo(Promise.reject(error));
-    const req = { body: { ...validBody } };
-    const res = {
-        locals: {},
-        redirect: jest.fn(()=>{})
-    };
-    const next = jest.fn(()=>{});
-
-    await mw(objRepo)(req, res, next);
-
-    expect(res.redirect).not.toBeCalled();
-    expect(next).toBeCalledWith(error);
+    expect(next).toHaveBeenCalledWith(boom);
+  });
 });

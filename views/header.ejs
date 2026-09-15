@@ -3,14 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bucketlist</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title><%= typeof pageTitle !== 'undefined' ? pageTitle : brand %></title>
+    <meta name="description" content="Keep a private list of the things you want to do, and put a map of the ones you have done online.">
+    <link rel="stylesheet" href="<%= u('/styles.css') %>">
+    <link rel="icon" href="<%= u('/favicon.svg') %>" type="image/svg+xml">
 </head>
 <body>
     <header>
-        <h1>Adventures - Take you places.</h1>
+        <a class="brand" href="<%= u('/') %>"><%= brand %></a>
         <nav>
-            <a href="/adventures">Adventures</a>
-            <a href="/locations">Locations</a>
+            <% if (currentUser) { %>
+                <a href="<%= u('/lists') %>">My lists</a>
+                <a href="<%= u('/adventures') %>">All adventures</a>
+                <a href="<%= basePath %>/u/<%= currentUser.handle %>">My map</a>
+                <a href="<%= u('/settings') %>">Settings</a>
+                <form method="POST" action="<%= u('/logout') %>" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+                    <button type="submit" class="linklike">Log out</button>
+                </form>
+            <% } else { %>
+                <a href="<%= u('/login') %>">Log in</a>
+                <% if (signupsOpen) { %>
+                    <a href="<%= u('/signup') %>" class="button small">Sign up</a>
+                <% } %>
+            <% } %>
         </nav>
     </header>
+    <main>
+    <% if (typeof flash !== 'undefined' && flash) { %>
+        <p class="flash"><%= flash %></p>
+    <% } %>
+    <% if (currentUser && !currentUser.emailVerifiedAt && typeof hideVerifyBanner === 'undefined') { %>
+        <p class="flash warn">
+            Confirm your email to publish or share lists.
+            <a href="<%= u('/settings') %>">Send a new link</a>
+        </p>
+    <% } %>

@@ -1,0 +1,76 @@
+<%- include('header', { pageTitle: 'Settings' }) %>
+<section class="narrow">
+    <h1>Settings</h1>
+    <%- include('_errors') %>
+
+    <dl class="kv">
+        <dt>Name</dt><dd><%= currentUser.displayName %></dd>
+        <dt>Handle</dt><dd>@<%= currentUser.handle %> · <a href="<%= basePath %>/u/<%= currentUser.handle %>">public page</a></dd>
+        <dt>Email</dt>
+        <dd>
+            <%= currentUser.email %>
+            <% if (currentUser.emailVerifiedAt) { %>
+                <span class="badge public">verified</span>
+            <% } else { %>
+                <span class="badge unlisted">unverified</span>
+            <% } %>
+        </dd>
+        <dt>Photo storage</dt>
+        <dd><%= (currentUser.storageUsedBytes / 1048576).toFixed(1) %> MB used of <%= quotaMb %> MB</dd>
+    </dl>
+
+    <% if (!currentUser.emailVerifiedAt) { %>
+        <div class="callout">
+            <p>
+                Confirm your email address to publish or share lists.
+                Private lists work without it.
+            </p>
+            <form method="POST" action="<%= u('/verify/resend') %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+                <button type="submit" class="button small">Send me a new link</button>
+            </form>
+        </div>
+    <% } %>
+
+    <h2>Change password</h2>
+    <form method="POST" action="<%= u('/settings/password') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+        <div class="form-group">
+            <label for="currentPassword">Current password</label>
+            <input id="currentPassword" name="currentPassword" type="password" required autocomplete="current-password">
+            <% if (errors.currentPassword) { %><span class="error"><%= errors.currentPassword %></span><% } %>
+        </div>
+        <div class="form-group">
+            <label for="newPassword">New password</label>
+            <input id="newPassword" name="newPassword" type="password" minlength="10" required autocomplete="new-password">
+            <% if (errors.newPassword) { %><span class="error"><%= errors.newPassword %></span><% } %>
+        </div>
+        <div class="button-container"><button type="submit" class="button">Update password</button></div>
+    </form>
+
+    <h2>Your data</h2>
+    <p>Download everything this service holds about you as a JSON file.</p>
+    <p><a href="<%= u('/settings/export') %>" class="button ghost">Export my data</a></p>
+
+    <h2 class="danger-heading">Delete account</h2>
+    <p>
+        This removes your account, every list, every adventure and every photo,
+        permanently. It cannot be undone.
+    </p>
+    <form method="POST" action="<%= u('/settings/delete') %>" novalidate
+          onsubmit="return confirm('Permanently delete your account and everything in it?')">
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+        <div class="form-group">
+            <label for="deletePassword">Your password</label>
+            <input id="deletePassword" name="password" type="password" required autocomplete="current-password">
+            <% if (errors.deletePassword) { %><span class="error"><%= errors.deletePassword %></span><% } %>
+        </div>
+        <div class="form-group">
+            <label for="confirmHandle">Type <strong><%= currentUser.handle %></strong> to confirm</label>
+            <input id="confirmHandle" name="confirmHandle" required autocomplete="off">
+            <% if (errors.confirmHandle) { %><span class="error"><%= errors.confirmHandle %></span><% } %>
+        </div>
+        <div class="button-container"><button type="submit" class="button delete">Delete my account</button></div>
+    </form>
+</section>
+<%- include('footer') %>

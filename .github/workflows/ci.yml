@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Check for known vulnerabilities
+        run: npm audit --audit-level=high
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t bucketlist:ci .
+      - name: Boot it against a throwaway Mongo
+        run: |
+          docker network create ci-net
+          docker run -d --name mongo --network ci-net mongo:7
+          docker run -d --name app --network ci-net \
+            -e MONGODB_URI=mongodb://mongo:27017/ci \
+            -e SESSION_SECRET=ci-secret-that-is-long-enough-to-pass-check \
+            -e PUBLIC_BASE_URL=http://localhost:3000 \
+            -p 3000:3000 bucketlist:ci
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000/healthz > /dev/null; then
+              echo "healthy after ${i}s"; exit 0
+            fi
+            sleep 1
+          done
+          echo "app did not become healthy"; docker logs app; exit 1

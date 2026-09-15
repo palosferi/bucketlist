@@ -1,0 +1,26 @@
+<%- include('header', { pageTitle: 'Reset your password' }) %>
+<section class="narrow">
+    <% if (typeof resetRequested !== 'undefined' && resetRequested) { %>
+        <h1>Check your inbox</h1>
+        <p>
+            If an account exists for that address, a reset link is on its way.
+            It expires in an hour.
+        </p>
+        <p><a href="<%= u('/login') %>" class="linklike">Back to log in</a></p>
+    <% } else { %>
+        <h1>Reset your password</h1>
+        <p>Enter your email and we will send you a link to choose a new password.</p>
+        <form method="POST" action="<%= u('/forgot') %>" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required autocomplete="email">
+            </div>
+            <div class="button-container">
+                <button type="submit" class="button">Send reset link</button>
+                <a href="<%= u('/login') %>" class="linklike">Cancel</a>
+            </div>
+        </form>
+    <% } %>
+</section>
+<%- include('footer') %>

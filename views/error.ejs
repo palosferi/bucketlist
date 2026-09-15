@@ -1,0 +1,7 @@
+<%- include('header', { pageTitle: 'Error' }) %>
+<section class="narrow">
+    <h1><%= status %></h1>
+    <p><%= message %></p>
+    <p><a href="<%= u('/') %>">Back to the start</a></p>
+</section>
+<%- include('footer') %>

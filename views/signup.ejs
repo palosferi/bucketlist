@@ -1,0 +1,43 @@
+<%- include('header', { pageTitle: 'Sign up' }) %>
+<section class="narrow">
+    <h1>Create an account</h1>
+    <%- include('_errors') %>
+    <form method="POST" action="<%= u('/signup') %>" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken() %>">
+
+        <div class="form-group">
+            <label for="displayName">Your name</label>
+            <input id="displayName" name="displayName" maxlength="60" required
+                   value="<%= form.displayName || '' %>">
+            <% if (errors.displayName) { %><span class="error"><%= errors.displayName %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="handle">Handle</label>
+            <input id="handle" name="handle" maxlength="30" required
+                   pattern="[a-z0-9-]{3,30}" value="<%= form.handle || '' %>">
+            <small>Your public map will live at /u/your-handle</small>
+            <% if (errors.handle) { %><span class="error"><%= errors.handle %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" maxlength="254" required
+                   value="<%= form.email || '' %>">
+            <% if (errors.email) { %><span class="error"><%= errors.email %></span><% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" minlength="10" required>
+            <small>At least 10 characters.</small>
+            <% if (errors.password) { %><span class="error"><%= errors.password %></span><% } %>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="button">Create account</button>
+            <a href="<%= u('/login') %>" class="linklike">I already have one</a>
+        </div>
+    </form>
+</section>
+<%- include('footer') %>
