@@ -98,9 +98,31 @@ function subscribeToRoutes(app) {
   app.use(csrf());
 
   // --- public ---------------------------------------------------------------
-  app.get('/', (req, res) => {
+  app.get('/', async (req, res, next) => {
     if (res.locals.currentUser) return res.redirect('/lists');
-    return res.render('landing', res.locals);
+    try {
+      // FEATURED_HANDLE is fixed at deploy time, so it goes stale the moment
+      // that account is renamed -- and an unchecked link then points the
+      // landing page's main call to action at a 404. One lookup on a unique
+      // index, and only for logged-out visitors.
+      if (res.locals.featuredHandle) {
+        const featured = await UserModel.findOne({ handle: res.locals.featuredHandle })
+          .select('_id')
+          .lean();
+        if (!featured) {
+          if (!warnedMissingFeatured) {
+            console.warn(
+              `[config] FEATURED_HANDLE is "${res.locals.featuredHandle}", which is not a handle any account has. Hiding the landing page link.`
+            );
+            warnedMissingFeatured = true;
+          }
+          res.locals.featuredHandle = '';
+        }
+      }
+      return res.render('landing', res.locals);
+    } catch (err) {
+      return next(err);
+    }
   });
 
   app.get('/privacy', renderMW(objRepo, 'privacy'));
@@ -191,6 +213,10 @@ function subscribeToRoutes(app) {
     return res.render('error', res.locals);
   });
 }
+
+// Logged once per process, so a stale handle is visible in the container log
+// without every landing render repeating it.
+let warnedMissingFeatured = false;
 
 function signupsGate(req, res, next) {
   if (config.signupsOpen) return next();
