@@ -303,3 +303,8 @@ figcaption { color: var(--muted); font-size: 0.8125rem; margin-top: 0.5rem; }
 }
 .swatch input:checked + span { border-color: var(--text); }
 .swatch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Two selects rather than <input type="month">, which Firefox does not
+   implement — it degrades to a bare text box with no picker at all. */
+.month-picker { display: flex; gap: 0.5rem; }
+.month-picker select { flex: 1 1 0; min-width: 0; }

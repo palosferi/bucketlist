@@ -38,7 +38,7 @@ const { verifyCsrf } = require('../middlewares/csrf');
 const photoStoreLib = require('../lib/photoStore');
 const { COUNTRIES, countryName, ALPHA2_TO_NUMERIC } = require('../lib/countries');
 const { COLORS, colorHex } = require('../lib/colors');
-const { formatMonth, toMonthInput } = require('../lib/dates');
+const { formatMonth, toMonthParts, yearRange, MONTHS } = require('../lib/dates');
 const config = require('../lib/config');
 
 const UserModel = require('../models/user');
@@ -71,7 +71,9 @@ function subscribeToRoutes(app) {
     res.locals.colors = COLORS;
     res.locals.colorHex = colorHex;
     res.locals.formatMonth = formatMonth;
-    res.locals.toMonthInput = toMonthInput;
+    res.locals.toMonthParts = toMonthParts;
+    res.locals.months = MONTHS;
+    res.locals.years = yearRange();
     res.locals.alpha2ToNumeric = ALPHA2_TO_NUMERIC;
     res.locals.query = req.query;
     res.locals.errors = {};

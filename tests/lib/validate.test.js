@@ -45,6 +45,20 @@ describe('parseAdventure', () => {
     expect(() => parseAdventure({ name: 'x', date: '2025-05-10' })).toThrow(ValidationError);
   });
 
+  it('accepts the month and year selects the form actually posts', () => {
+    const out = parseAdventure({ name: 'x', dateMonth: '7', dateYear: '2026' });
+    expect(out.date.toISOString()).toBe('2026-07-01T00:00:00.000Z');
+  });
+
+  it('treats both selects blank as "not set"', () => {
+    expect(parseAdventure({ name: 'x', dateMonth: '', dateYear: '' }).date).toBeNull();
+  });
+
+  it('rejects half a date rather than guessing the other half', () => {
+    expect(() => parseAdventure({ name: 'x', dateMonth: '7' })).toThrow(ValidationError);
+    expect(() => parseAdventure({ name: 'x', dateYear: '2026' })).toThrow(ValidationError);
+  });
+
   it('rejects an impossible month', () => {
     expect(() => parseAdventure({ name: 'x', date: '2025-13' })).toThrow(ValidationError);
     expect(() => parseAdventure({ name: 'x', date: '2025-00' })).toThrow(ValidationError);

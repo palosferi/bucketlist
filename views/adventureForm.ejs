@@ -32,9 +32,25 @@
                 <input id="type" name="type" maxlength="40" placeholder="hike, dive, concert…" value="<%= v('type', a.type) %>">
             </div>
             <div class="form-group">
-                <label for="date">Month</label>
-                <input id="date" name="date" type="month"
-                       value="<%= v('date', toMonthInput(a.date)) %>">
+                <label for="dateMonth">When</label>
+                <% var dp = toMonthParts(a.date) %>
+                <% var selMonth = form.dateMonth !== undefined ? form.dateMonth : dp.month %>
+                <% var selYear  = form.dateYear  !== undefined ? form.dateYear  : dp.year %>
+                <div class="month-picker">
+                    <select id="dateMonth" name="dateMonth" aria-label="Month">
+                        <option value="">— month —</option>
+                        <% months.forEach(function (name, i) { %>
+                            <option value="<%= i + 1 %>" <%= String(i + 1) === String(selMonth) ? 'selected' : '' %>><%= name %></option>
+                        <% }) %>
+                    </select>
+                    <select id="dateYear" name="dateYear" aria-label="Year">
+                        <option value="">— year —</option>
+                        <% years.forEach(function (y) { %>
+                            <option value="<%= y %>" <%= String(y) === String(selYear) ? 'selected' : '' %>><%= y %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <small>Leave both blank if you would rather not say.</small>
                 <% if (errors.date) { %><span class="error"><%= errors.date %></span><% } %>
             </div>
         </div>
